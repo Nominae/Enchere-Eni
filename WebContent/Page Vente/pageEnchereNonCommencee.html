@@ -7,20 +7,18 @@
 <body>
 	<nav>
 			<a href=#>ENI-Encheres</a>
-			<a href=#>S'incrire - Se connecter</a>
 	</nav>	
 	<h1> Nouvelle vente </h1>
 	<img src="#"	alt="Exemple de produit - #">
 	<div>
 		<form method="post">
-			<div>
 				<div>
 					<label for="Article">Article</label>
 					<input type="text" placeholder="Entrez le nom de l'article" required="required">
 				</div>
 				<div>
 					<label for="Description">Description</label>
-					<textarea type="text" placeholder="Entrez une description" required="required"></textarea>
+					<textarea  placeholder="Entrez une description" required="required"></textarea>
 				</div>
 				<div>
 					<label for="Selection-categorie">Catégorie :</label>
@@ -29,7 +27,7 @@
 						<option value="Informatique">Informatique </option>
 						<option value="Ameublement">Ameublement </option>
 						<option value="Vêtement">Vêtement </option>
-						<option value="Sport&Loisirs">Sport&Loisirs </option>
+						<option value="Sport&Loisirs">Sport et Loisirs </option>
 					</select>
 					<div>
 						<input type="file">
@@ -38,12 +36,13 @@
 				</div>
 				<div>
 					<div>
-						<label for="prixInitial">Prix Initial<label>
+						<label for="prixInitial">Prix Initial</label>
 						<input type="number" min="1" required="required">
 					</div>
 					<div> 
 						<label for ="DateDebutEnchere">Début de l'enchère : </label>
 						<input type="date" min="02/03/2021" required="required">
+					</div>
 					<div>
 						<label for="DateFinEnchere">Fin de l'enchère :</label> 
 						<input  type="date" min="04/03/2021" required="required">
@@ -60,6 +59,8 @@
 						<input type="text">
 					</div>
 				</div>
+				</form>
+			</div>
 				<button type="submit">Enregistrer</button>
 				<a href="./pageListeEnchereMesVentes.html">
 					<button type="reset">Annuler</button>
