@@ -5,6 +5,83 @@
 <title>Insert title here</title>
 </head>
 <body>
+        <nav>
+            <a href=#>ENI-Encheres</a>
+            <a href=#>Enchères</a>
+            <a href=#>Vendre un article</a>
+            <a href=#>Mon profil</a>
+            <a href=#>Déconnexion</a>
+
+ </nav>
+        <h1>Liste des enchères</h1>
+        </br>
+        </br>
+        <div>
+            <label for="site-search">Filtres :</label>
+            <input type="search" id="site-search" name="recherche" aria-label="Le nom de l'article contient">
+            <button>Rechercher</button>
+        </div>
+        </br>
+        <div>
+            <label for="Selection-categorie">Catégorie :</label>
+            <select name="Categorie" id="Selection-categorie">
+                <option value="Toutes">Toutes </option>
+                <option value="Informatique">Informatique </option>
+                <option value="Ameublement">Ameublement </option>
+                <option value="Vêtement">Vêtement </option>
+                <option value="Sport&Loisirs">Sport&Loisirs </option>
+            </select>
+        </div>
+        </br>
+        </br>
+        <fieldset>
+              <legend>
+                  <input type="radio" id="Options-achat" name="achat" value="achat"> Achats :
+              </legend>
+              <div>
+                <input type="checkbox" id="encheres ouvertes" name="encheres" value="encheres ouvertes">
+                <label for="encheres ouvertes">enchères ouvertes</label>
+              </div>
+              <div>
+                   <input type="checkbox" id="mes encheres" name="encheres" value="mes encheres">
+                <label for="mes encheres">mes enchères</label>
+              </div>
+              <div>
+                   <input type="checkbox" id="mes encheres remportées" name="interest" value="mes encheres remportées">
+                <label for="mes encheres remportées">mes encheres remportées</label>
+              </div>
+        </fieldset>
+        <fieldset>
+              <legend>
+                  <input type="radio" id="Options-vente" name="ventes" value="ventes" checked> Mes ventes :
+              </legend>
+              <div>
+                <input type="checkbox" id="mes ventes en cours" name="mes ventes" value="mes ventes en cours">
+                <label for="mes ventes en cours">mes ventes en cours</label>
+             </div>
+              <div>
+                   <input type="checkbox" id="ventes non débutées" name="mes ventes" value="ventes non débutées" checked>
+                <label for="ventes non débutées">ventes non débutées</label>
+              </div>
+              <div>
+                   <input type="checkbox" id="ventes terminées" name="mes ventes" value="ventes terminées">
+                <label for="ventes terminées">ventes terminées</label>
+              </div>
+        </fieldset>
+        </br>
+        
+        <div>
+            <img src="#"    alt="Exemple de produit - #">
+            <div>
+                <h4>PIOU PIOU</h4>
+                <p> Prix : tbd </p>
+                <p> Fin de l'enchère : JJ/MM/AAAA </p>
+                <p> Vendeur : Nom du vendeur </p>
+            </div>
+        </div>
+        <footer>To be determined</footer>
+
+ 
 
 </body>
 </html>
