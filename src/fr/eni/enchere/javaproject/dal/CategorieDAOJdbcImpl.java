@@ -12,9 +12,9 @@ public class CategorieDAOJdbcImpl {
 
 	private final static String SELECT_ALL = "select * from CATEGORIES";
 	private final static String SELECT_BY_ID = "select * from CATEGORIES where no_categorie = ?";
+	private final static String UPDATER = "update from CATEGORIES where no_categorie = ? and libellé = ? ;";
 	private final static String INSERER = "insert into CATEGORIES(no_categorie, libelle (?;?);";
 	private final static String SUPPRIMER = "delete from CATEGORIES where no_categorie = ? and libellé = ? ;";
-	private final static String UPDATER = "update from CATEGORIES where no_categorie = ? and libellé = ? ;";
 
 
 // Méthode SelectAll
