@@ -27,10 +27,7 @@ public class Utilisateurs implements Serializable{
 	}
 	
 // Constructeur prenant en compte tous les paramètres
-	public Utilisateurs(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone,
-			String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur) {
-		super();
-		this.noUtilisateur = noUtilisateur;
+	public Utilisateurs(String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur) {
 		this.pseudo = pseudo;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -42,6 +39,12 @@ public class Utilisateurs implements Serializable{
 		this.motDePasse = motDePasse;
 		this.credit = credit;
 		this.administrateur = administrateur;
+	}	
+	
+// Constructeur prenant en compte tous les paramètres + noUtilisateur
+	public Utilisateurs(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur) {
+		this( pseudo, nom, prenom, email, telephone, rue, codePostal,ville, motDePasse, credit, administrateur);
+		this.noUtilisateur = noUtilisateur;
 	}
 
 // Getters et Setters

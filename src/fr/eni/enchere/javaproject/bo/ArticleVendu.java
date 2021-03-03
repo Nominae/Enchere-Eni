@@ -1,6 +1,7 @@
 package fr.eni.enchere.javaproject.bo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class ArticleVendu implements Serializable {
@@ -20,6 +21,16 @@ public class ArticleVendu implements Serializable {
 	private boolean publication;
 	private int finEnchere;
 	
+	//Getters&Setters finEnchere
+	
+	public int getFinEnchere() {
+		return finEnchere;
+	}
+
+	
+	public void setFinEnchere(int finEnchere) {
+		this.finEnchere = finEnchere;
+	}
 	
 // Constructeur par défaut
 	public ArticleVendu() {

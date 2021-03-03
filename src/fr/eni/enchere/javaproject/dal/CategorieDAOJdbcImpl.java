@@ -10,82 +10,98 @@ import fr.eni.enchere.javaproject.bo.Categorie;
 
 public class CategorieDAOJdbcImpl {
 
-	private static final String NUMCATEGORIE= "select * from CATEGORIES where no_categorie = ? ;";
-	private static final String LIBELLECATEGORIE= "select * from CATEGORIES where libelle = ? ;";
-	
-	
-// Connexion
+	private final static String SELECT_ALL = "select * from CATEGORIES";
+	private final static String SELECT_BY_ID = "select * from CATEGORIES where no_categorie = ?";
+	private final static String INSERER = "insert into CATEGORIES(no_categorie, libelle (?;?);";
+	private final static String SUPPRIMER = "delete from CATEGORIES where no_categorie = ? and libellé = ? ;";
+	private final static String UPDATER = "update from CATEGORIES where no_categorie = ? and libellé = ? ;";
 
 
-// recherche d'une catégorie à partir du NUMCATEGORIE via le Libellé
+// Méthode SelectAll
 
-	public static Categorie libelleCat (int id) throws DALException {
-		Connection con = null;
-		PreparedStatement stmt = null;
+	public static List<Categorie> selectAll() throws DALException {
+		List<Categorie> ListeCategorie = new ArrayList<Categorie>();
+		Connection cnx = null;
+		Statement stmt = null;
 		ResultSet rs = null;
-		Categorie cate = null;
 		
-		try {
-			con = getConnection();
-			stmt = con.prepareStatement(NUMCATEGORIE);
-			stmt.setInt(1, id);
-			rs = stmt.executeQuery();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			{
+			stmt = cnx.createStatement();
+			rs = stmt.executeQuery(SELECT_ALL);
 			
-			if (rs.next()) {
-					cate = new Categorie();
-					cate.setLibelle(rs.getString("libelle"));
-					
-		} catch (SQLException e) {
-			throw new DALException ("Impossible d'afficher le libellé", e);
-		
+			while (rs.next()) {
+				Categorie categorie = new Categorie();
+				categorie.setNoCategorie(rs.getInt("no_categorie"));
+				categorie.setLibelle(rs.getString("libelle"));
+				ListeCategorie.add(categorie);
+			}
+		} catch (Exception e) {
+			throw new DALException("Impossible d'afficher la catégorie", e);
 		} finally {
 			try {
-				rs.close();
-				stmt.close();
-				con.close();
-				
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (cnx != null) cnx.close();
 			} catch (SQLException e) {
-			
-				
+				throw new DALException("Fermeture de la connexion BDD ko", e);
 			}
 		}
-		} return cate;
-		
+		return ListeCategorie;
 	}
 
-// recherche d'une catégorie à partir du LIBELLECATEGORIE via le numéro de catégorie
-	public static Categorie numCategorie (String libelle) throws DALException {
-		Connection con = null;
-		PreparedStatement stmt = null;
+}
+
+	public static Categorie selectByIdCat(int id) throws DALException {
+		Connection cnx = null;
+		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		Categorie cate = null;
 		
-		try {
-			con = getConnection();
-			stmt = con.prepareStatement(LIBELLECATEGORIE);
-			stmt.setInt(1, libelle);
-			rs = stmt.executeQuery();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			{
+			pstmt = cnx.prepareStatement(SELECT_BY_ID);
 			
-			if (rs.next()) {
-					cate = new Categorie();
-					cate.setnumCategorie(rs.getString("no_categorie"));
-					cate.setLibelle("libelle");
+			statement.setInt(1, id);
+			rs = statement.executeQuery();
+			while (rs.next()) {
+				Categorie categorie = new Categorie();
+				categorie.setNoCategorie(rs.getInt("no_categorie"));
+				categorie.setLibelle(rs.getString("libelle"));
 			}
 		} catch (SQLException e) {
-			throw new DALException ("Impossible d'afficher le numéro de catégorie", e);
+			throw new DALException("Impossible d'afficher la catégorie", e);
 		
 		} finally {
 			try {
-				rs.close();
-				stmt.close();
-				con.close();
+				if (rs != null) rs.close();
+				if (stmt != null) stmt.close();
+				if (cnx != null) cnx.close();
 				
 			} catch (SQLException e) {
-			
-				
+				throw new DALException("Fermeture de la connexion BDD ko", e);
 			}
-		}return cate;
-		} 
+		}
+		return categorie;
+	}
 
-	
-	
+}
+
+// Méthode Update
+
+	public void update(Categorie categorie) {
+		Connection cnx = null;
+		PreparedStatement pstmt = null;
+		
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+				pstmt = cnx.prepareStatement(UPDATER);
+					pstmt.setInt(1, categorie.getNoCategorie());
+					pstmt.setString(2, categorie.getLibelle());
+					}
+
+						pstmt.executeUpdate();
+
+					} catch (SQLException e) {
+						throw new DALException("Impossible de mettre à jour la catégorie", e);
+
+					}
+	}
