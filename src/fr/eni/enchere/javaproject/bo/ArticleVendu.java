@@ -18,6 +18,7 @@ public class ArticleVendu implements Serializable {
 	private int noUtilisateur;
 	private int noCategorie;
 	private boolean publication;
+	private int finEnchere;
 	
 	
 // Constructeur par défaut

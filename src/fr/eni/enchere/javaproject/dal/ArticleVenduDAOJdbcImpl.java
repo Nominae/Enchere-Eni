@@ -1,5 +1,10 @@
 package fr.eni.enchere.javaproject.dal;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import fr.eni.enchere.javaproject.bo.ArticleVendu;
@@ -24,10 +29,48 @@ public class ArticleVenduDAOJdbcImpl {
 	
 	//	Methode Select de toute les ventes
 	
-		public static ArrayList<Ventes> listeVentes() throws DALException {
+		public static ArrayList<ArticleVendu> listeVentes() throws DALException {
+			Connection connexion=null;
+			Statement statement=null;
+			ResultSet rs=null;
+			ArrayList<ArticleVendu> liste = new ArrayList<>();
+			
+			try {
+			//getconnection
+				
+				while (rs.next()) {
+					ArticleVendu article = new ArticleVendu();
+					article.setPrixVente(rs.getInt("no_article"));
+					article.setNomArticle(rs.getString("nom_article"));
+					article.setDescription(rs.getString("description"));
+					article.setDateDebutEnchere(LocalDateTime.parse(rs.getString("date_debut_encheres")));
+					article.setDateFinEnchere(LocalDateTime.parse(rs.getString("date_fin_encheres")));
+					article.setPrixInitial(rs.getInt("prix_initial"));
+					article.setPrixVente(rs.getInt("prix_vente"));
+					article.setNoUtilisateur(rs.getInt("no_utilisateur"));
+					article.setNoCategorie(rs.getInt("no_categorie"));
+					liste.add(article);
+
+				}
+			} catch (SQLException e) {		
+					throw new DALException ();	
+			}finally{
+				try{
+					if (statement!=null) statement.close();
+					if (connexion!=null) connexion.close();
+				} catch (SQLException e) {
+						throw new DALException ();
+				}
+			}
+			return liste;		
+		}	
+		
+		
 			
 			
 			
-		}
+			
+			
+		
 
 }
