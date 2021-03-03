@@ -1,5 +1,6 @@
 package fr.eni.enchere.javaproject.dal;
 
-public class UtilisateursDAO {
+public class CategorieDAOJdbcImpl {
 
+	
 }

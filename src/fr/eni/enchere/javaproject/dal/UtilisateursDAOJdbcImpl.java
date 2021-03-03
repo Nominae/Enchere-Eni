@@ -1,5 +1,5 @@
 package fr.eni.enchere.javaproject.dal;
 
-public class VenteDAO {
+public class UtilisateursDAOJdbcImpl {
 
 }

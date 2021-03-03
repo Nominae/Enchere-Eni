@@ -1,5 +1,5 @@
 package fr.eni.enchere.javaproject.dal;
 
-public class RetraitDAO {
+public class RetraitDAOJdbcImpl {
 
 }
