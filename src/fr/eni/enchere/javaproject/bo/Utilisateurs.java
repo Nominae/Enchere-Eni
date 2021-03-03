@@ -26,7 +26,7 @@ public class Utilisateurs implements Serializable{
 		
 	}
 	
-//Constructeur prenant en compte tous les paramètres
+// Constructeur prenant en compte tous les paramètres
 	public Utilisateurs(int noUtilisateur, String pseudo, String nom, String prenom, String email, String telephone,
 			String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur) {
 		super();

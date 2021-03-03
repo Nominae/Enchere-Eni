@@ -37,7 +37,7 @@ public class ArticleVendu implements Serializable {
 		this.noCategorie = noCategorie;
 	}
 	
-	// Getters et Setters
+// Getters et Setters
 	public int getNoArticle() {
 		return noArticle;
 	}
@@ -92,6 +92,8 @@ public class ArticleVendu implements Serializable {
 	public void setNoCategorie(int noCategorie) {
 		this.noCategorie = noCategorie;
 	}
+	
+// méthode ToString
 	@Override
 	public String toString() {
 		return "ArticleVendu [noArticle=" + noArticle + ", nomArticle=" + nomArticle + ", description=" + description

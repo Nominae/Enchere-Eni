@@ -9,7 +9,7 @@ public class Categorie	implements Serializable {
 		private int noCategorie;
 		private String libelle;
 		
-
+		// Constructeur par défaut
 		public Categorie() {
 			
 		}

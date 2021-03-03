@@ -12,11 +12,12 @@ public class Retrait implements Serializable{
 	private String ville;
 	
 	
-	// Constructeur par défaut
+// Constructeur par défaut
 	public Retrait() {
 		
 	}
-	//Constructeur prenant en compte tous les paramètres
+
+// Constructeur prenant en compte tous les paramètres
 	public Retrait(int noArticle, String rue, String codePostal, String ville) {
 		super();
 		this.noArticle = noArticle;
@@ -26,7 +27,7 @@ public class Retrait implements Serializable{
 	}
 
 	
-	//Getters et Setters 
+// Getters et Setters 
 	public int getNoArticle() {
 		return noArticle;
 	}
@@ -59,7 +60,7 @@ public class Retrait implements Serializable{
 		this.ville = ville;
 	}
 	
-	//ToString
+// Méthode ToString
 	@Override
 	public String toString() {
 		return "Retrait ->\n Num Article :" + noArticle + "\n rue :" + rue + "\n Code Postal :" + codePostal + "\n Ville :" + ville;
