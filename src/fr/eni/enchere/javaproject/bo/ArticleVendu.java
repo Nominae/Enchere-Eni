@@ -18,7 +18,8 @@ public class ArticleVendu implements Serializable {
 	private int prixVente;
 	private int noUtilisateur;
 	private int noCategorie;
-	private boolean publication;
+	private boolean publier;
+	private boolean archiver;
 	private int finEnchere;
 	
 	//Getters&Setters finEnchere
@@ -49,6 +50,19 @@ public class ArticleVendu implements Serializable {
 		this.prixVente = prixVente;
 		this.noUtilisateur = noUtilisateur;
 		this.noCategorie = noCategorie;
+	}
+	
+	public boolean isArchiver() {
+		return archiver;
+	}
+	public void setArchiver(boolean archiver) {
+		this.archiver = archiver;
+	}
+	public boolean isPublier() {
+		return publier;
+	}
+	public void setPublier(boolean publier) {
+		this.publier = publier;
 	}
 	
 // Getters et Setters
@@ -108,18 +122,14 @@ public class ArticleVendu implements Serializable {
 	}
 	
 // méthode ToString
+
 	@Override
 	public String toString() {
 		return "ArticleVendu [noArticle=" + noArticle + ", nomArticle=" + nomArticle + ", description=" + description
 				+ ", dateDebutEnchere=" + dateDebutEnchere + ", dateFinEnchere=" + dateFinEnchere + ", prixInitial="
 				+ prixInitial + ", prixVente=" + prixVente + ", noUtilisateur=" + noUtilisateur + ", noCategorie="
-				+ noCategorie + "]";
+				+ noCategorie + ", publier=" + publier + ", archiver=" + archiver + ", finEnchere=" + finEnchere + "]";
 	}
 	
-	
-	
-	
-	}
-
-
+}
 
