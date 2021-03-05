@@ -36,13 +36,15 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 			pstmt.setInt(10, 0);
 			pstmt.setBoolean(11, false);
 			
+			pstmt.executeUpdate();
+			
 			rs = pstmt.getGeneratedKeys();
 			
 			if(rs.next()) {
 				utilisateurs.setNoUtilisateur(rs.getInt(1));
 			}
 			
-			pstmt.executeUpdate();
+			
 			
 		}catch(SQLException e) {
 			
