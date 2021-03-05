@@ -18,9 +18,11 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 		
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
+		Connection cnx = null;
 		
-		try(Connection cnx = ConnectionProvider.getConnection()){
-		
+		try {
+			
+			cnx = ConnectionProvider.getConnection();
 			pstmt = cnx.prepareStatement(INSERT_USER, PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, utilisateurs.getPseudo());
 			pstmt.setString(2, utilisateurs.getNom());
@@ -50,8 +52,17 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 			
 			try {
 				
-				rs.close();
-				pstmt.close();
+				if(rs!=null) {
+					rs.close();
+				}
+				
+				if(pstmt!=null) {
+					pstmt.close();
+				}
+				
+				if(cnx!=null) {
+					cnx.close();
+				}
 				
 			} catch (SQLException e) {
 				
@@ -66,9 +77,11 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 		
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
+		Connection cnx = null;
 		
-		try(Connection cnx = ConnectionProvider.getConnection()){
-		
+		try{
+			
+			cnx = ConnectionProvider.getConnection();
 			pstmt = cnx.prepareStatement(UPDATE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1, utilisateurs.getPseudo());
 			pstmt.setString(2, utilisateurs.getNom());
@@ -98,8 +111,17 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 			
 			try {
 				
-				rs.close();
-				pstmt.close();
+				if(rs!=null) {
+					rs.close();
+				}
+				
+				if(pstmt!=null) {
+					pstmt.close();
+				}
+				
+				if(cnx!=null) {
+					cnx.close();
+				}
 				
 			} catch (SQLException e) {
 				
@@ -115,9 +137,9 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 		int id = noUtilisateur;
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-		
-		try(Connection cnx = ConnectionProvider.getConnection()){
-		
+		Connection cnx = null;
+		try {
+			cnx = ConnectionProvider.getConnection();
 			pstmt = cnx.prepareStatement(DELETE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1, id);
 			
@@ -133,8 +155,17 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 			
 			try {
 				
-				rs.close();
-				pstmt.close();
+				if(rs!=null) {
+					rs.close();
+				}
+				
+				if(pstmt!=null) {
+					pstmt.close();
+				}
+				
+				if(cnx!=null) {
+					cnx.close();
+				}
 				
 			} catch (SQLException e) {
 				
@@ -146,3 +177,4 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 	}
 	
 }
+

@@ -1,30 +1,8 @@
 package fr.eni.enchere.javaproject.dal;
 
-public class RetraitDAOJdbcImpl {
-
-	private static final String INSERT_RETRAIT = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String UPDATE_RETRAIT = "UPDATE UTILISATEURS SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, credit = ?, administrateur = ?";
-	private static final String DELETE_RETRAIT = "DELETE FROM UTILISATEURS WHERE noUtilisateur = ?)";
-
-
-Insert
-SelectById
-update - modif adresse
-update - valider le retrait ??
-delete retrait
-
-
-RETRAITS
-no_article
-rue
-code_postal
-ville
-
-
-
-package fr.eni.enchere.javaproject.dal;
-
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import fr.eni.enchere.javaproject.bo.Retrait;
@@ -34,68 +12,150 @@ public class RetraitDAOJdbcImpl {
 	private final static String INSERT_RETRAIT = "insert into RETRAITS(no_article, rue, code_postal, ville) values (?,?,?,?);";
 	private final static String SELECT_BY_ID_RETRAIT = "select * from RETRAITS where no_article = ?;";
 	private final static String UPDATE_RETRAIT = "update RETRAITS SET no_article = ?, rue = ?, code_postal = ?, ville = ?";
-	private final static String DELETE_RETRAIT = "delete from RETRAITS where no_article = ?;";
+	private final static String DELETE_RETRAIT = "delete from RETRAITS where noArticle = ?;";
 
 	
 	
 	
 //Méthode INSERT_RETRAIT
-	public static Retrait InsertRetrait(int no_article) throws DALException, SQLException {
-		
-		Connection cnx=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		
-		Retrait retrait = new Retrait();
-		
-		try {
-			cnx=DBConnection.seConnecter();
-			pstmt=cnx.prepareStatement(RECHERCHERETRAITVENTE);
-			pstmt.setInt(1, numVente);
-			rs=pstmt.executeQuery();
+	public static Retrait InsertRetrait(Retrait AjoutRetrait) throws DALException {
 			
-			while(rs.next()) {
-			retrait.setNoVente(numVente);
-			retrait.setRue(rs.getString("rue"));
-			retrait.setCodePostal(rs.getString("code_postal"));
-			retrait.setVille(rs.getString("ville"));
-			}
-		} catch (SQLException e) {
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			Retrait retraitCree = null;
 			
-			throw new DALException ("Probleme - Impossible d'affichage d' un article ( RetraitDAO ) - " + e.getMessage());
-		}finally{
-		
+			try (Connection cnx = ConnectionProvider.getConnection()) {
+
+				pstmt = cnx.prepareStatement(INSERT_RETRAIT, PreparedStatement.RETURN_GENERATED_KEYS);
 				
+				pstmt.setInt(1, AjoutRetrait.getNoArticle());
+				pstmt.setString(2, AjoutRetrait.getRue());
+				pstmt.setString(3, AjoutRetrait.getCodePostal());
+				pstmt.setString(4, AjoutRetrait.getVille());
+
+				rs = pstmt.getGeneratedKeys();
+				
+				if(rs.next()) {
+					AjoutRetrait.setNoArticle(rs.getInt(1));
+				}
+				
+				pstmt.executeUpdate();
+				
+			} catch (SQLException e) {
+				throw new DALException ("Impossible d'ajouter un retrait " + e.getMessage());
+			
+			}finally{
+			
+				try {
+					if (rs != null) rs.close();
 					if (pstmt!=null) pstmt.close();
-					if (cnx!=null) cnx.close();
-				
-
-		return retrait;
+					
+			} catch (SQLException e) {
+					throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
+					
+				}
+		}
+			return retraitCree;
 	}
-}
+		
+
+//Méthode UPDATE_RETRAIT 
+	public void updateRetrait (Retrait MajRetrait) throws DALException {
+		ResultSet rs = null;
+		PreparedStatement pstmt = null;
+		
+		try(Connection cnx = ConnectionProvider.getConnection()){
+			
+			pstmt = cnx.prepareStatement(UPDATE_RETRAIT);
+			
+			pstmt.setString(1, MajRetrait.getRue());
+			pstmt.setString(2, MajRetrait.getCodePostal());
+			pstmt.setString(3, MajRetrait.getVille());
+			
+			if(rs.next()) {
+				MajRetrait.setNoArticle(rs.getInt(1));
+			}
+			
+			pstmt.executeUpdate();
+			
+		}catch(SQLException e) {
+			throw new DALException("Impossible de mettre à jour l'adresse retrait" + e.getMessage());
+		
+		}finally {
+			
+			try {
+				
+				if (rs != null) rs.close();
+				if (pstmt != null) pstmt.close();
+				
+			} catch (SQLException e) {
+				throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
+				
+			}
+		}
+	} 	
+		
+
+//Méthode DELETE_RETRAIT 
+
+	public void deleteRetrait(Retrait DeleteRetrait) throws DALException {
+		
+		PreparedStatement pstmt = null;
+		
+		try (Connection cnx = ConnectionProvider.getConnection()){
+			pstmt = cnx.prepareStatement(DELETE_RETRAIT);
+		
+	        pstmt.setInt(1, DeleteRetrait.getNoArticle());
+	        
+			pstmt.executeUpdate();
 	
-	
-SelectbyId
-Insert
-Update
-Delete
+		}catch(SQLException e) {
+			throw new DALException("Impossible de supprimer l'adresse de retrait" + e.getMessage());
+		
+		}finally {
+			
+			try {
+				if (pstmt != null) pstmt.close();
+				
+			} catch (SQLException e) {
+				throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
+				
+			}
+		}
 
+	} 	
 
+//Méthode SELECT_BY_ID_RETRAIT
+	 public static Retrait selectRetraitById(int noArticle) throws DALException {
 
+		 ResultSet rs = null;
+		 PreparedStatement pstmt = null;
+		 
+		 Retrait retrait = null;
+		 
+	     try (Connection cnx = ConnectionProvider.getConnection()){
+	    	 pstmt = cnx.prepareStatement(SELECT_BY_ID_RETRAIT);
+	    	 
+	    	 pstmt.setInt(1, noArticle);
+	         
+	         if (rs.next()) {
+	                retrait = retraitBuilder(rs);
+	         }
+	         
+	         ResultSet resultSet = pstmt.executeQuery();
+	         
+	     }catch(SQLException e) {
+				throw new DALException("Impossible de'afficher l'adresse de retrait" + e.getMessage());
+			
+			}finally {
+				
+				try {
+					if (pstmt != null) pstmt.close();
+					
+				} catch (SQLException e) {
+					throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
+					
+				}
+			}
 
-
-
-
-
-
-}
-
-
-
-
-
-
-
-
-
-}
+}  
