@@ -55,7 +55,6 @@ public class CategorieDAOJdbcImpl {
 
 
 // Méthode SelectById
-	
 	public static Categorie selectByIdCat(int noCategorie) throws DALException {
 
 		PreparedStatement pstmt = null;

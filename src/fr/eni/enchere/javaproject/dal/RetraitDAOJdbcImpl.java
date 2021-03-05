@@ -60,7 +60,7 @@ public class RetraitDAOJdbcImpl {
 		
 
 //Méthode UPDATE_RETRAIT 
-	public void updateRetrait (Retrait MajRetrait) throws DALException {
+	public void updateRetrait(Retrait MajRetrait) throws DALException {
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		

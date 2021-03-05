@@ -1,4 +1,4 @@
-package fr.eni.javaproject.servlet;
+package fr.eni.enchere.javaproject.servlet;
 
 import java.io.IOException;
 
@@ -15,15 +15,15 @@ import fr.eni.enchere.javaproject.bo.Utilisateurs;
 /**
  * Servlet implementation class ServletUtilisateurs
  */
-@WebServlet("/connexion/ServletUtilisateurs")
-public class ServletUtilisateurs extends HttpServlet {
+@WebServlet("/connexion")
+public class ServletCreationCompte extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/Eclipse/Enchere-Eni/WebContent/WEB-INF/connexion/CreationCompte.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
 		rd.forward(request, response);
 	}
 
@@ -57,7 +57,7 @@ public class ServletUtilisateurs extends HttpServlet {
 
 		request.setAttribute("user", user);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("/Eclipse/Enchere-Eni/WebContent/WEB-INF/connexion/CreationCompte.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
 		rd.forward(request, response);
 		
 		

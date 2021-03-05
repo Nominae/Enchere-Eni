@@ -16,7 +16,7 @@
 		<h2>Mon profil</h2>
 		<br>
 		<div>
-			<form action="<%=request.getContextPath()%>/Enchere-Eni/src/fr/eni/javaproject/servlet/ServletUtilisateurs" method="post" class="form">
+			<form action="<%=request.getContextPath()%>/connexion" method="post" class="form">
 			    <label for="pseudo">Pseudo : </label>
 			    <input type="text" value="<%=request.getParameter("pseudo")%>" name="pseudo" id="pseudo" required>
 			    
