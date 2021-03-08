@@ -1,5 +1,6 @@
 package fr.eni.enchere.javaproject.bll;
 
+import java.util.ArrayList;
 import fr.eni.enchere.javaproject.bo.Utilisateurs;
 import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.dal.UtilisateursDAO;
@@ -29,12 +30,29 @@ public class UtilisateursManager {
 		utilisateurs.setMotDePasse(motDePasse);
 		utilisateurs.setCredit(0);
 		utilisateurs.setAdministrateur(false);
-		this.utilisateursDAO.insertUser(utilisateurs);
+		if(verifMail(email)) {
+			this.utilisateursDAO.insertUser(utilisateurs); 
+		}else {
+			//throw new BusinessException("L'email est déjà utilisé, veuillez en utiliser un autre.");
+		}
 		return utilisateurs;
 		
 	}
 
-	
+	public Boolean verifMail (String mail) {
+		
+		ArrayList<String> listMail = utilisateursDAO.selectAllEmail();
+		
+		for (String email : listMail) {
+			
+			if(mail.equals(email)) return false;
+				
+		}
+		
+		return true;
+		
+	}
+
 	
 	/**void insertUser() {
 			

@@ -44,8 +44,8 @@
 			    <label for="motDePasse">Mot de passe : </label>
 			    <input type="password" value="<%=request.getParameter("motDePasse")%>" name="motDePasse" id="motDePasse" required>
 			    
-			    <label for="motDePasse">Confirmation : </label>
-			    <input type="password" value="<%=request.getParameter("motDePasse")%>" name="motDePasse" id="motDePasse" required><br>
+			    <label for="confirmMotDePasse">Confirmation : </label>
+			    <input type="password" value="<%=request.getParameter("confirmMotDePasse")%>" name="confirmMotDePasse" id="confirmMotDePasse" required><br>
 			    
 			    <a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageListeEncheresConnecte.html"><input type="submit" value="Créer"></a>
 			    <a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageAccueilNonConnecte.html"><input type="reset" value="Annuler" ></a>

@@ -5,373 +5,209 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.eni.enchere.javaproject.bo.Enchere;
-import fr.eni.enchere.javaproject.bo.Retrait;
-import fr.eni.enchere.javaproject.bo.Utilisateurs;
-import fr.eni.enchere.javaproject.bo.ArticleVendu;
-import fr.eni.enchere.javaproject.dal.ConnectionProvider;
-import java.util.ArrayList;
+import fr.eni.enchere.javaproject.utils.BusinessException;
 
 /**
+ * Classe en charge de faire les traitements sur la bd des encheres
  * 
- * @author jbodet2019
- *
+ * @author aurel
+ * @version TPENIEnchere - v1.0
+ * @date 14 janv. 2021 - 16:48:40
  */
+public class EnchereDAOJdbcImpl implements EnchereDAO {
+	private static final String DELETE = "delete from ENCHERES where no_enchere=?";
+	private static final String INSERT = "insert into ENCHERES (date_enchere, montant_enchere, no_article, no_utilisateur) "
+			+ "values(?,?,?,?)";
+	private static final String SELECT_ID = "select * from ENCHERES where no_enchere=?";
+	private static final String SELECT_HISTORIQUE_ARTICLE = "select * from ENCHERES where no_article=?";
+	private static final String SELECT_HISTORIQUE_ARTICLE_DECROISSANT = "select * from ENCHERES where no_article=? order by montant_enchere desc";
+	private static final String SELECT_ALL = "select * from ENCHERES";
+	private static final String UPDATE = "update ENCHERES Set date_enchere= ?, montant_enchere=?, no_article=?, no_utilisateur=? where no_enchere=?";
 
-public class EnchereDAOJdbcImpl {
-	
-	private final static String RECHERCHER_UN_NO_UTILISATEUR = "select no_utilisateur from ENCHERES where no_vente = ? ORDER BY montantEnchere DESC;";
-	private final static String INSERERENCHERE = "insert into ENCHERES(date_enchere, no_utilisateur, no_vente, montantEnchere) values (?,?,?,?);";
-	private final static String VERIFICATION_UTILISATEUR_ENCHERIR = "select * FROM ENCHERES WHERE no_utilisateur = ? AND no_vente = ? ;";
-	private final static String RECHERCHE_NO_ARTICLE_PAR_NO_UTILISATEUR = "select no_vente FROM ENCHERES WHERE no_utilisateur = ? ;";
-	private final static String RECHERCHELISTEENCHEREPARNO_ARTICLE = "select * FROM ENCHERES WHERE no_vente = ? ;";
-	private final static String MODIFIER = "update ENCHERES set date_enchere = ?, montantEnchere = ? WHERE no_utilisateur= ? AND no_vente = ?;";
-	private final static String SUPPRESSION_ENCHERE = "delete FROM ENCHERES WHERE no_utilisateur= ? AND no_vente = ?;";
-	private final static String SUPPRESSION_ENCHERE_COMPLETE = "delete FROM ENCHERES WHERE no_vente = ?;";
-	private final static String RECHERCHER_MEILLEURE_VENTE = "select * from ENCHERES where no_vente = ? ORDER BY montantEnchere DESC";
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void delete(int id) throws BusinessException {
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(DELETE);
+			stm.setInt(1, id);
+			stm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SUPPRESSION_ENCHERE);
+			throw businessException;
+		}
 
-	public static Enchere rechercheUnUserEncheri(int noArticle) throws DALException {
-		// Méthode recherchant un noUtilisateur d'une personne qui encheri
-		
-		
-		Connection cnx=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		Enchere enchere = new Enchere();
-		
-		
-		try {
-			ConnectionProvider.getConnection();
-			pstmt=cnx.prepareStatement(RECHERCHER_UN_NO_UTILISATEUR);
-			pstmt.setInt(1, noArticle);
-			rs=pstmt.executeQuery();
-			
-			
-			if(rs.next()) {	
-				enchere.setNoUtilisateur(rs.getInt("no_utilisateur"));
-			
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void insert(Enchere enchere) throws BusinessException {
+		if (enchere == null) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.INSERT_OBJET_NULL);
+			throw businessException;
+		}
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
+			stm.setDate(1, enchere.getDate_enchere());
+			stm.setInt(2, enchere.getMontant_enchere());
+			stm.setInt(3, enchere.getNo_article());
+			stm.setInt(4, enchere.getNo_utilisateur());
+
+			stm.executeUpdate();
+			ResultSet rs = stm.getGeneratedKeys();
+
+			if (rs.next()) {
+				enchere.setNo_enchere(rs.getInt(1));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.INSERTION_ENCHERE);
+			throw businessException;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Enchere selectId(int id) throws BusinessException {
+		Enchere enchere = null;
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ID);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+			if (rs.next()) {
+				enchere = this.encheresConstructeur(rs);
+			} else {
+				BusinessException businessException = new BusinessException();
+				businessException.ajouterErreur(CodesResultatDAL.SELECT_ID_INEXISTANT);
+				throw businessException;
 			}
 		} catch (SQLException e) {
-			
-			throw new DALException ("Probleme - Impossible de prendre un n° utilisateur ( EnchereDAO ) - " + e.getMessage());
-		}finally{
-			
-			try {
-				if (pstmt!=null) pstmt.close();
-				if (cnx!=null) cnx.close();
-			} catch (SQLException e) {
-			
-				e.printStackTrace();
-			}
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.CONNECTION_DAL);
+			throw businessException;
 		}
+
 		return enchere;
-	
 	}
-	
-	//méthode pour créer une enchère
-	
-	
-	
-	public static void ajouterEnchere(String date, Enchere enchere) throws DALException{
-		Connection cnx=null;
-		PreparedStatement pstmt=null;
-	
-		try{
-			ConnectionProvider.getConnection();
-			pstmt=cnx.prepareStatement(INSERERENCHERE);
-			pstmt.setString(1, date);
-			pstmt.setInt(2, enchere.getNoUtilisateur());
-			pstmt.setInt(3, enchere.getNoArticle()); 
-			pstmt.setInt(4, enchere.getMontantEnchere());
-			pstmt.executeUpdate();
-			
 
-		} catch (SQLException e){
-			throw new DALException ("Probleme - ajouter une enchère - " + e.getMessage());
-		}finally{
-			try{
-				if (pstmt!=null) pstmt.close();
-				if (cnx!=null) cnx.close();
-			}catch (SQLException e){
-				throw new DALException ("Probleme - fermerConnexion - " + e.getMessage());
-			}		
-		}
-	}
-	
-	public static Enchere verificationUserEncherir(int noArticle, int numUser) throws DALException {
-		// Permet de vérifier si l'utilisateur à enchéri au moins une fois
-
-		Connection cnx = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		Enchere verificationEnchere = new Enchere();
-		
-		try {
-			ConnectionProvider.getConnection();
-			pstmt = cnx.prepareStatement(VERIFICATION_UTILISATEUR_ENCHERIR);
-			pstmt.setInt(1, numUser);
-			pstmt.setInt(2, noArticle);
-			rs = pstmt.executeQuery();
-			
-			if (rs.next()){
-				verificationEnchere.setNoUtilisateur(numUser);
-				verificationEnchere.setNoArticle(noArticle);
-				verificationEnchere.setMontantEnchere(rs.getInt("montantEnchere"));
-			}
-			
-		} catch (SQLException e) {
-			throw new DALException("Probleme - VerificationUserEncherir - " + e.getMessage());
-		}finally {
-			try {
-
-				if (pstmt != null)
-					pstmt.close();
-				if (cnx != null)
-					cnx.close();
-			} catch (SQLException e) {
-				throw new DALException("Probleme - fermerConnexion - " + e.getMessage());
-			}
-		}
-		
-		
-		
-		return verificationEnchere;
-	}
-	
-	public static ArrayList<Integer> quelleVenteEncherie (int no_user) throws DALException {
-		//chercher les ventes sur lesquelles l'utilisateur a ench�ri
-		Connection cnx = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		int no = 0;
-		ArrayList<Integer> list = new ArrayList<>();
-		
-		try {
-			ConnectionProvider.getConnection();
-			pstmt = cnx.prepareStatement(RECHERCHE_NO_ARTICLE_PAR_NO_UTILISATEUR);
-			
-			pstmt.setInt(1, no_user);
-			rs = pstmt.executeQuery();
-			
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Enchere> selectHistoriqueArticle(int noArticle) throws BusinessException {
+		List<Enchere> encheres = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_HISTORIQUE_ARTICLE);
+			stm.setInt(1, noArticle);
+			ResultSet rs = stm.executeQuery();
 			while (rs.next()) {
-				list.add(rs.getInt("no_article"));
+				encheres.add(this.encheresConstructeur(rs));
 			}
-			
 		} catch (SQLException e) {
-			throw new DALException("Probleme - VerificationUserEncherir - " + e.getMessage());
-		}finally {
-			try {
-
-				if (pstmt != null)
-					pstmt.close();
-				if (cnx != null)
-					cnx.close();
-			} catch (SQLException e) {
-				throw new DALException("Probleme - fermerConnexion - " + e.getMessage());
-			}
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.CONNECTION_DAL);
+			throw businessException;
 		}
-		return list;
+
+		return encheres;
 	}
-	
-	
-	
-	
-	//Méthode pour obtenir la liste d'enchère à partir du num vente
-	public static ArrayList<Enchere> listeEncheres (int noArticle) throws DALException {
-		Connection cnx=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
-		ArrayList<Enchere> listeEnchere = new ArrayList<>();
-			
-			try {
-				ConnectionProvider.getConnection();
-				pstmt=cnx.prepareStatement(RECHERCHELISTEENCHEREPARNO_ARTICLE);					
-				pstmt.setInt(1, noArticle);	
-				rs=pstmt.executeQuery();
-				
-				while (rs.next()) {
-					Enchere enchereZ = new Enchere();
-					
-					enchereZ.setNoUtilisateur(rs.getInt("no_utilisateur"));
-					enchereZ.setNoArticle(noArticle);
-					enchereZ.setMontantEnchere(rs.getInt("montant_enchere"));
-					listeEnchere.add(enchereZ);
-					
-				}
-			} catch (SQLException e) {		
-					throw new DALException ("Probleme - listeEnchere - " + e.getMessage());	
-			}finally{
-				try{
-					if (pstmt!=null) pstmt.close();
-					if (cnx!=null) cnx.close();
-				} catch (SQLException e) {
-						throw new DALException ("Probleme - FermerConnexion - " + e.getMessage());
-				}
-			}
-			return listeEnchere;		
-		}
 
-	public static void modificationEnchere(String dateTime, int noUtilisateur, int noArticle,
-			int proposEnchere) throws DALException {
-		// Permet de modifier une enchère
-		
-		Connection cnx = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			ConnectionProvider.getConnection();
-			pstmt = cnx.prepareStatement(MODIFIER);
-			pstmt.setString(1, dateTime);
-			pstmt.setInt(2, proposEnchere);
-			pstmt.setInt(3, noUtilisateur);
-			pstmt.setInt(4, noArticle);
-			pstmt.executeUpdate();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Enchere> selectAll() throws BusinessException {
+		List<Enchere> encheres = new ArrayList<Enchere>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {
+				encheres.add(this.encheresConstructeur(rs));
+			}
 		} catch (SQLException e) {
-			throw new DALException("Probleme - modifierEnchere - " + e.getMessage());
-		}finally {
-			try {
-
-				if (pstmt != null)
-					pstmt.close();
-				if (cnx != null)
-					cnx.close();
-			} catch (SQLException e) {
-				throw new DALException("Probleme - fermerConnexion - " + e.getMessage());
-			}
+			e.printStackTrace();
 		}
-		
-		
+		return encheres;
 	}
 
-	public static void suppressionEnchere(int noUtilisateur, int noArticle) throws DALException {
-		//Suppression d'une enchère pour ensuite l'ajouter de nouveau avec les bonnes valeurs
-		Connection cnx = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs=null;
-		try {
-			ConnectionProvider.getConnection();
-			pstmt=cnx.prepareStatement(SUPPRESSION_ENCHERE);
-			pstmt.setInt(1, noUtilisateur);
-			pstmt.setInt(2, noArticle);	
-			pstmt.executeUpdate();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void update(Enchere enchere, int id) throws BusinessException, SQLException {
+		if (enchere == null) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.UPDATE_OBJET_NULL);
+			throw businessException;
+		}
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(UPDATE);
+			stm.setDate(1, enchere.getDate_enchere());
+			stm.setInt(2, enchere.getMontant_enchere());
+			stm.setInt(3, enchere.getNo_article());
+			stm.setInt(4, enchere.getNo_utilisateur());
+			stm.setInt(5, id);
+			stm.executeUpdate();
+
 		} catch (SQLException e) {
-			throw new DALException("Probleme - suppressionEnchere - " + e.getMessage());
-		}finally {
-			try {
-
-				if (pstmt != null)
-					pstmt.close();
-				if (cnx != null)
-					cnx.close();
-			} catch (SQLException e) {
-				throw new DALException("Probleme - fermerConnexion - " + e.getMessage());
-			}
+			e.printStackTrace();
 		}
-		
+
 	}
 
-	public static void ajouterEnchereSuiteSuppression(String date, int noUtilisateur, int noArticle, int proposEnchere) throws DALException {
-		//Création d'une enchère suite à la suppression dans la base
-		
-		Connection cnx=null;
-		PreparedStatement pstmt=null;
-	
-		try{
-			ConnectionProvider.getConnection();
-			pstmt=cnx.prepareStatement(INSERERENCHERE);
-			pstmt.setString(1, date);
-			pstmt.setInt(2, noUtilisateur);
-			pstmt.setInt(3, noArticle); 
-			pstmt.setInt(4, proposEnchere);
-			pstmt.executeUpdate();
-			
-
-		} catch (SQLException e){
-			throw new DALException ("Probleme - ajouter une enchère suite suppression - " + e.getMessage());
-		}finally{
-			try{
-				if (pstmt!=null) pstmt.close();
-				if (cnx!=null) cnx.close();
-			}catch (SQLException e){
-				throw new DALException ("Probleme - fermerConnexion suite suppression - " + e.getMessage());
-			}		
-		}
-	
-		
-	}
-
-	public static void suppressionEnchereComplete(int noArticle) throws DALException {
-		// Suppression totale de l'enchere avec tous les users.
-		
-		Connection cnx = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs=null;
-		try {
-			ConnectionProvider.getConnection();
-			pstmt=cnx.prepareStatement(SUPPRESSION_ENCHERE_COMPLETE);
-			pstmt.setInt(1, noArticle);	
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			throw new DALException("Probleme - suppressionEnchere - " + e.getMessage());
-		}finally {
-			try {
-
-				if (pstmt != null)
-					pstmt.close();
-				if (cnx != null)
-					cnx.close();
-			} catch (SQLException e) {
-				throw new DALException("Probleme - fermerConnexion - " + e.getMessage());
-			}
-		}
-		
-		
-		
-		
-	}
-
-	public static Enchere rechercheMeilleureMontant(int noArticle) throws DALException {
-		// Recherche de la meilleure vente afin de MAJ prixVente de la table VENTE
-		
-		Connection cnx=null;
-		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+	/**
+	 * Méthode en charge de construire des encheres après extraction en bd
+	 * 
+	 * @param rs resultset d'extraction de bd
+	 * @return un objet de type enchere
+	 * @throws SQLException
+	 */
+	private Enchere encheresConstructeur(ResultSet rs) throws SQLException {
 		Enchere enchere = new Enchere();
-		
-		
-		try {
-			ConnectionProvider.getConnection();
-			pstmt=cnx.prepareStatement(RECHERCHER_MEILLEURE_VENTE);
-			pstmt.setInt(1, noArticle);
-			rs=pstmt.executeQuery();
-			
-			
-			if(rs.next()) {	
-				enchere.setNoUtilisateur(rs.getInt("no_Utilisateur"));
-				enchere.setMontantEnchere(rs.getInt("montant_enchere"));
-				enchere.setNoArticle(noArticle);
-			
-			}
-		} catch (SQLException e) {
-			
-			throw new DALException ("Probleme - Impossible de prendre un n° utilisateur ( EnchereDAO ) - " + e.getMessage());
-		}finally{
-			
-			try {
-				if (pstmt!=null) pstmt.close();
-				if (cnx!=null) cnx.close();
-			} catch (SQLException e) {
-			
-				e.printStackTrace();
-			}
-		
-	}
+		enchere.setNo_enchere(rs.getInt("no_enchere"));
+		enchere.setDate_enchere(rs.getDate("date_enchere"));
+		enchere.setMontant_enchere(rs.getInt("montant_enchere"));
+		enchere.setNo_article(rs.getInt("no_article"));
+		enchere.setNo_utilisateur(rs.getInt("no_utilisateur"));
 		return enchere;
 	}
-	
-}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<Enchere> selectHistoriqueArticleDecroissant(int noArticle) throws BusinessException {
+		List<Enchere> encheres = new ArrayList<>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_HISTORIQUE_ARTICLE_DECROISSANT);
+			stm.setInt(1, noArticle);
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {
+				encheres.add(this.encheresConstructeur(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.CONNECTION_DAL);
+			throw businessException;
+		}
+
+		return encheres;
+	}
+}	

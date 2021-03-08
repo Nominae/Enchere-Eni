@@ -123,7 +123,7 @@ public class RetraitDAOJdbcImpl {
 			}
 		}
 
-	} 	
+	}
 
 //Méthode SELECT_BY_ID_RETRAIT
 	 public static Retrait selectRetraitById(int noArticle) throws DALException {
@@ -139,7 +139,7 @@ public class RetraitDAOJdbcImpl {
 	    	 pstmt.setInt(1, noArticle);
 	         
 	         if (rs.next()) {
-	                retrait = retraitBuilder(rs);
+	         	retrait.setNoArticle(rs.getInt(1));
 	         }
 	         
 	         ResultSet resultSet = pstmt.executeQuery();
@@ -156,6 +156,8 @@ public class RetraitDAOJdbcImpl {
 					throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
 					
 				}
-			}
+			}   return retrait;
 
-}  
+	} 
+
+} 
