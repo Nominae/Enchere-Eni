@@ -21,10 +21,10 @@
 			    <input type="text" value="<%=request.getParameter("pseudo")%>" name="pseudo" id="pseudo" required>
 			    
 			    <label for="nom">Nom : </label>
-			    <input type="text" value="<%=request.getParameter("nom")%>" name="nom" id="nom" required><br>
+			    <input type="text" value="<%=request.getParameter("nom")%>nom" name="nom" id="nom" required><br>
 			    
 			    <label for="prenom">Prénom : </label>
-			    <input type="text" value="<%=request.getParameter("prenom")%>" name="prenom" id="prenom" required>
+			    <input type="text" value="<%=request.getParameter("prenom")%>prenom" name="prenom" id="prenom" required>
 			    
 			    <label for="email">Email : </label>
 			    <input type="email" value="<%=request.getParameter("email")%>" name="email" id="email" required><br>

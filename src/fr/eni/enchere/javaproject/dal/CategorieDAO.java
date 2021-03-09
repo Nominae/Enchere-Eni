@@ -8,6 +8,6 @@ public interface CategorieDAO {
 
 	public void insertCategorie(Categorie categorie);
 	public List<Categorie> selectAllCat();
-	public void deleteCategorie(int noCategorie);
-	public void deleteCategorie(String libelle);
+	public void supprimerCategorie(int noCategorie);
+	public void supprimerCategorie(String libelle);
 }

@@ -238,6 +238,61 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO{
 		return listMail;
 		
 	}
+	
+	public ArrayList<String> selectAllPseudo() {
+			
+			ResultSet rs = null;
+			Statement stmt = null;
+			Connection cnx = null;
+			
+			ArrayList<String> listPseudo = new ArrayList<String>();
+			
+			try {
+				
+				cnx = ConnectionProvider.getConnection();
+				stmt = cnx.createStatement();
+				
+				
+				rs = stmt.executeQuery(SELECT_PSEUDO);
+				
+				while (rs.next()) {
+					
+					listPseudo.add(rs.getString("pseudo"));
+					
+				}
+				
+				
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+				
+			}finally {
+				
+				try {
+					
+					if(rs!=null) {
+						rs.close();
+					}
+					if(stmt!=null) {
+						stmt.close();
+					}
+					if(cnx!=null) {
+						cnx.close();
+					}
+					
+				} catch (Exception e2) {
+					
+					e2.printStackTrace();
+					
+				}
+				
+			}
+			
+			return listPseudo;
+					
+		}
+	
+	
 }
 
 																		/**Connection connection = MyResource.getConnection();

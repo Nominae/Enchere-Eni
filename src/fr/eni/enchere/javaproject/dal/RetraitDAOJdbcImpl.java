@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import fr.eni.enchere.javaproject.bo.Retrait;
 
-public class RetraitDAOJdbcImpl {
+public class RetraitDAOJdbcImpl implements RetraitDAO {
 
 	private final static String INSERT_RETRAIT = "insert into RETRAITS(no_article, rue, code_postal, ville) values (?,?,?,?);";
 	private final static String SELECT_BY_ID_RETRAIT = "select * from RETRAITS where no_article = ?;";

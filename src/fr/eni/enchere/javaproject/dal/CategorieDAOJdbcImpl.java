@@ -11,7 +11,7 @@ import java.util.List;
 import fr.eni.enchere.javaproject.bo.Categorie;
 import fr.eni.enchere.javaproject.dal.DALException;
 
-public class CategorieDAOJdbcImpl {
+public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 	private final static String SELECT_ALL_CAT = "select * from CATEGORIES";
 	private final static String SELECT_BY_ID_CAT = "select * from CATEGORIES where no_categorie = ?;";

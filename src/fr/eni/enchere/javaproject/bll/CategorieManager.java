@@ -30,10 +30,10 @@ public class CategorieManager {
 	}
 	
 	public void deleteCategorie(int noCategorie) {
-		this.categorieDAO.deleteCategorie(noCategorie);
+		this.categorieDAO.supprimerCategorie(noCategorie);
 	}
 	
 	public void deleteCategorie(String libelle) {
-		this.categorieDAO.deleteCategorie(libelle);
+		this.categorieDAO.supprimerCategorie(libelle);
 	}
 }

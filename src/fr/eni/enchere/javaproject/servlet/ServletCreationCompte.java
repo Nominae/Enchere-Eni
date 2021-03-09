@@ -11,12 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.enchere.javaproject.bll.UtilisateursManager;
 import fr.eni.enchere.javaproject.bo.Utilisateurs;
-import fr.eni.enchere.javaproject.dal.UtilisateursDAOJdbcImpl;
 
 /**
  * Servlet implementation class ServletUtilisateurs
  */
-@WebServlet("/connexion")
+@WebServlet("/creationcompte")
 public class ServletCreationCompte extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -24,6 +23,7 @@ public class ServletCreationCompte extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
 		
 		rd.forward(request, response);
@@ -59,32 +59,28 @@ public class ServletCreationCompte extends HttpServlet {
 		confirmMotDePasse = request.getParameter("confirmMotDePasse").trim();
 		
 		Utilisateurs user = new Utilisateurs(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, 0, false); 
-		
 		try {
 			
 			newUser.insertUser(0, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, confirmMotDePasse, 0, false);
 			
 			request.setAttribute("user", user);
 			
-			RequestDispatcher rd = request.getRequestDispatcher("/WebContent/Page Connexion/pageConnexion.html");
+			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/AcceuilConnecte.jsp");
 			rd.forward(request, response);
 			
-		} catch (Exception e) {
+		}catch (Exception e) {
 			
 			request.setAttribute("Erreur", e.getMessage());
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
+			request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
+			
+		} 
 			
 			//TODO: ecrire front le message erreur mail
 			
-		}
-		
-		
-		
-		
 	}
 
-
 }
+
 /**try {
 
 pseudoSaisie.equals(newUser.selectPseudo(pseudoSaisie).getPseudo().trim());
