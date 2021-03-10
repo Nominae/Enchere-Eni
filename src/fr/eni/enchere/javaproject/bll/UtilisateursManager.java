@@ -1,9 +1,15 @@
 package fr.eni.enchere.javaproject.bll;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.sql.SQLException;
+
+
 import fr.eni.enchere.javaproject.bo.Utilisateurs;
 import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.dal.UtilisateursDAO;
+import fr.eni.enchere.javaproject.utils.BusinessException;
+
 
 public class UtilisateursManager {
 	
@@ -70,4 +76,116 @@ public class UtilisateursManager {
 		
 	}
 	
-}
+	public Utilisateurs getUtilisateursLogin(String EmailouPseudo, String motDePasse) {
+		
+		Utilisateurs utilisateur = null;
+		
+		
+		try {
+			
+			utilisateur = utilisateursDAO.selectLogin(EmailouPseudo, motDePasse);
+			
+			System.out.println(utilisateur);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		
+		
+		return utilisateur;
+			
+	}
+		
+	
+
+	public boolean verifUtilisateurLogin(String EmailouPseudo) {
+	    
+		boolean utilisateurExist= false;
+	
+		boolean verifEmail;
+		boolean verifPseudo;
+		
+	    try {
+	    	
+	    	verifEmail = utilisateursDAO.verifEmail(EmailouPseudo, 0);
+	        verifPseudo = utilisateursDAO.verifPseudo(EmailouPseudo, 0);
+	    	
+	        if((verifEmail & !verifPseudo)||(!verifEmail & verifPseudo)){
+	           
+	        	utilisateurExist= true;
+	         
+	        	System.out.println(verifEmail);
+	        	System.out.println(verifPseudo);
+	        }
+	
+	    } catch (Exception e) {
+	    	
+	        e.printStackTrace();
+	        
+	    }
+	    
+	    return utilisateurExist;
+	    
+	}
+	
+	public Utilisateurs selectId(int id) throws BusinessException {
+		Utilisateurs utilisateur = null;
+		utilisateur = this.utilisateursDAO.selectId(id);
+		return utilisateur;
+	}
+		
+		public Utilisateurs VerifConnexion(String pseudo, String mdp) throws BusinessException {
+			Utilisateurs utilisateur = null;
+			BusinessException businessException = new BusinessException();
+			boolean connexion = false;
+			utilisateur = this.selectPseudo(pseudo);
+			if (!utilisateur.getPseudo().isEmpty()) {
+				if (utilisateur.getMotDePasse().equals(mdp)) {
+					connexion = true;
+
+				}
+			} else {
+				businessException.ajouterErreur(CodeResultatBll.PSEUDO_INEXISTANT);
+			}
+			if (!connexion) {
+				businessException.ajouterErreur(CodeResultatBll.ECHEC_CONNEXION_MDP_INCORRECT);
+				utilisateur = null;
+				return null;
+			} else {
+				return utilisateur;
+			}
+		}
+		
+		public Utilisateurs selectPseudo(String pseudo) throws BusinessException {
+			Utilisateurs utilisateur = null;
+			utilisateur = this.utilisateursDAO.selectPseudo(pseudo);
+			return utilisateur;
+		}
+		
+		public void AjouterCredit(Utilisateurs utilisateur, int debit) throws BusinessException, SQLException {
+			BusinessException businessException = new BusinessException();
+			int credit = utilisateur.getCredit() + debit;
+			utilisateur.setCredit(credit);
+			this.validerCredit(utilisateur, businessException);
+
+			if (!businessException.hasErreurs()) {
+
+				this.utilisateursDAO.updateCredit(utilisateur);
+
+			} else {
+				throw businessException;
+			}
+
+		}
+		
+		private void validerCredit(Utilisateurs utilisateur, BusinessException businessException) {
+			if (utilisateur.getCredit() < 0) {
+				businessException.ajouterErreur(CodeResultatBll.CREDIT_INVALIDE);
+			}
+		}
+
+	}
+	
+

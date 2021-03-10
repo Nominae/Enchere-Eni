@@ -10,6 +10,6 @@ public interface RetraitDAO {
 	public void updateRetrait(Retrait MajRetrait);
 	public void deleteRetrait(int noArticle);
 	
-		public Retrait insert(Retrait retrait) throws BusinessException;
+	public Retrait insert(Retrait retrait) throws BusinessException;
 
 }

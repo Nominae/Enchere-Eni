@@ -70,7 +70,7 @@ public class ServletCreationCompte extends HttpServlet {
 			
 		}catch (Exception e) {
 			
-			request.setAttribute("Erreur", e.getMessage());
+			//request.setAttribute("Erreur", e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
 			
 		} 
@@ -80,45 +80,3 @@ public class ServletCreationCompte extends HttpServlet {
 	}
 
 }
-
-/**try {
-
-pseudoSaisie.equals(newUser.selectPseudo(pseudoSaisie).getPseudo().trim());
-
-RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
-rd.forward(request, response);
-
-} catch (Exception e) {
-
-try {
-	
-	mailSaisie.equals(newUser.selectMail(mailSaisie).getMail().trim());
-	
-	RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
-	rd.forward(request, response);
-	
-} catch (Exception e2) {
-	
-	if(!confirmMotDePasse.equals(motDePasse)) {
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
-		rd.forward(request, response);
-		
-	}else if(pseudo == null || nom == null || prenom == null || email == null || telephone == null || rue == null || codePostal == null || ville == null || motDePasse == null ) {
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
-		rd.forward(request, response);
-		
-	}else {
-		
-		request.setAttribute("user", user);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/CreationCompte.jsp");
-		rd.forward(request, response);
-		
-	}
-	
-}
-
-
-}**/

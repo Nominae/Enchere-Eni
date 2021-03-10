@@ -55,9 +55,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	@Override
 	public void delete(int id) throws BusinessException {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(DELETE);
-			stm.setInt(1, id);
-			stm.executeUpdate();
+			PreparedStatement pstmt = cnx.prepareStatement(DELETE);
+			pstmt.setInt(1, id);
+			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			BusinessException businessException = new BusinessException();
@@ -78,20 +78,20 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			throw businessException;
 		}
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
-			stm.setString(1, article.getNom_article());
-			stm.setString(2, article.getDescription());
-			stm.setDate(3, article.getDate_debut_encheres());
-			stm.setDate(4, article.getDate_fin_encheres());
-			stm.setInt(5, article.getPrix_initial());
-			stm.setInt(6, article.getPrix_vente());
-			stm.setInt(7, article.getNo_utilisateur());
-			stm.setInt(8, article.getNo_categorie());
-			stm.setInt(9, article.getNo_retrait());
-			stm.setBoolean(10, article.getEtatVente());
+			PreparedStatement pstmt = cnx.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS);
+			pstmt.setString(1, article.getNom_article());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setDate(3, article.getDate_debut_encheres());
+			pstmt.setDate(4, article.getDate_fin_encheres());
+			pstmt.setInt(5, article.getPrix_initial());
+			pstmt.setInt(6, article.getPrix_vente());
+			pstmt.setInt(7, article.getNo_utilisateur());
+			pstmt.setInt(8, article.getNo_categorie());
+			pstmt.setInt(9, article.getNo_retrait());
+			pstmt.setBoolean(10, article.getEtatVente());
 
-			stm.executeUpdate();
-			ResultSet rs = stm.getGeneratedKeys();
+			pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
 
 			if (rs.next()) {
 				article.setNo_utilisateur(rs.getInt(1));
@@ -116,22 +116,22 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			throw businessException;
 		}
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(INSERT_AVEC_CHEMIN_IMG,
+			PreparedStatement pstmt = cnx.prepareStatement(INSERT_AVEC_CHEMIN_IMG,
 					PreparedStatement.RETURN_GENERATED_KEYS);
-			stm.setString(1, article.getNom_article());
-			stm.setString(2, article.getDescription());
-			stm.setDate(3, article.getDate_debut_encheres());
-			stm.setDate(4, article.getDate_fin_encheres());
-			stm.setInt(5, article.getPrix_initial());
-			stm.setInt(6, article.getPrix_vente());
-			stm.setInt(7, article.getNo_utilisateur());
-			stm.setInt(8, article.getNo_categorie());
-			stm.setInt(9, article.getNo_retrait());
-			stm.setBoolean(10, article.getEtatVente());
-			stm.setString(11, article.getCheminImg());
+			pstmt.setString(1, article.getNom_article());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setDate(3, article.getDate_debut_encheres());
+			pstmt.setDate(4, article.getDate_fin_encheres());
+			pstmt.setInt(5, article.getPrix_initial());
+			pstmt.setInt(6, article.getPrix_vente());
+			pstmt.setInt(7, article.getNo_utilisateur());
+			pstmt.setInt(8, article.getNo_categorie());
+			pstmt.setInt(9, article.getNo_retrait());
+			pstmt.setBoolean(10, article.getEtatVente());
+			pstmt.setString(11, article.getCheminImg());
 
-			stm.executeUpdate();
-			ResultSet rs = stm.getGeneratedKeys();
+			pstmt.executeUpdate();
+			ResultSet rs = pstmt.getGeneratedKeys();
 
 			if (rs.next()) {
 				article.setNo_utilisateur(rs.getInt(1));
@@ -152,9 +152,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public Article selectId(int id) throws BusinessException {
 		Article article = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_ID);
-			stm.setInt(1, id);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ID);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
 				article = this.articleConstructeur(rs);
 			} else {
@@ -179,9 +179,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectCategorie(int noCategorie) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_NO_CATEGORIE);
-			stm.setInt(1, noCategorie);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_NO_CATEGORIE);
+			pstmt.setInt(1, noCategorie);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -202,9 +202,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectRechercher(String rechercher) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_RECHERCHER);
-			stm.setString(1, rechercher);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_RECHERCHER);
+			pstmt.setString(1, rechercher);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -225,10 +225,10 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectCategorieRechercher(String rechercher, int noCategorie) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_RECHERCHER_CATEGORIE);
-			stm.setString(1, rechercher);
-			stm.setInt(2, noCategorie);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_RECHERCHER_CATEGORIE);
+			pstmt.setString(1, rechercher);
+			pstmt.setInt(2, noCategorie);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -249,9 +249,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectAchatAll(int noutilisateurs) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_ACHAT_ALL);
-			stm.setInt(1, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ACHAT_ALL);
+			pstmt.setInt(1, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -272,10 +272,10 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectAchatEnchereEnCour(int noutilisateurs) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_ACHAT_ENCHERE_EN_COURS);
-			stm.setInt(1, noutilisateurs);
-			stm.setInt(2, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ACHAT_ENCHERE_EN_COURS);
+			pstmt.setInt(1, noutilisateurs);
+			pstmt.setInt(2, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -300,10 +300,10 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		List<Enchere> encheres = new ArrayList<>();
 		Enchere enchere = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_ACHAT_ENCHERE_REMPORTE);
-			stm.setInt(1, noutilisateurs);
-			stm.setInt(2, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ACHAT_ENCHERE_REMPORTE);
+			pstmt.setInt(1, noutilisateurs);
+			pstmt.setInt(2, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				article = this.articleConstructeur(rs);
 				encheres = EnchereManager.selectHistoriqueArticle(article.getNo_article());
@@ -331,9 +331,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectVenteAll(int noutilisateurs) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_VENTE_ALL);
-			stm.setInt(1, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_ALL);
+			pstmt.setInt(1, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -354,9 +354,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	public List<Article> selectVenteEnCour(int noutilisateurs) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_VENTE_EN_COURS);
-			stm.setInt(1, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_EN_COURS);
+			pstmt.setInt(1, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -372,15 +372,15 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	/**
 	 * {@inheritDoc}
-	 */
+	 
 	@Override
 	public List<Article> selectVenteNonDebute(int noutilisateurs) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		Article articleCourant = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_VENTE_EN_COURS);
-			stm.setInt(1, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_EN_COURS);
+			pstmt.setInt(1, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articleCourant = this.articleConstructeur(rs);
 				if (articleCourant.getDate_debut_encheres().after(new Date())) {
@@ -397,17 +397,16 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 		return articles;
 	}
-
-	/**
-	 * {@inheritDoc}
 	 */
+
+	
 	@Override
 	public List<Article> selectVenteTermine(int noutilisateurs) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_VENTE_TERMINE);
-			stm.setInt(1, noutilisateurs);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_TERMINE);
+			pstmt.setInt(1, noutilisateurs);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
 			}
@@ -421,16 +420,14 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public List<Article> selectAll() throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		Article articleCourant = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL);
-			ResultSet rs = stm.executeQuery();
+			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articleCourant = this.articleConstructeur(rs);
 				if (!articleCourant.getEtatVente()) {
@@ -443,9 +440,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public void update(Article article, int id) throws BusinessException, SQLException {
 		if (article == null) {
@@ -454,18 +449,18 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			throw businessException;
 		}
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(UPDATE);
-			stm.setString(1, article.getNom_article());
-			stm.setString(2, article.getDescription());
-			stm.setDate(3, article.getDate_debut_encheres());
-			stm.setDate(4, article.getDate_fin_encheres());
-			stm.setInt(5, article.getPrix_initial());
-			stm.setInt(6, article.getPrix_vente());
-			stm.setInt(7, article.getNo_utilisateur());
-			stm.setInt(8, article.getNo_categorie());
-			stm.setInt(9, article.getNo_retrait());
-			stm.setInt(10, id);
-			stm.executeUpdate();
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE);
+			pstmt.setString(1, article.getNom_article());
+			pstmt.setString(2, article.getDescription());
+			pstmt.setDate(3, article.getDate_debut_encheres());
+			pstmt.setDate(4, article.getDate_fin_encheres());
+			pstmt.setInt(5, article.getPrix_initial());
+			pstmt.setInt(6, article.getPrix_vente());
+			pstmt.setInt(7, article.getNo_utilisateur());
+			pstmt.setInt(8, article.getNo_categorie());
+			pstmt.setInt(9, article.getNo_retrait());
+			pstmt.setInt(10, id);
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -473,17 +468,15 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public void updatePrixVente(int id, int prixDeVente) throws BusinessException, SQLException {
 
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(UPDATE_PRIX_DE_VENTE);
-			stm.setInt(1, prixDeVente);
-			stm.setInt(2, id);
-			stm.executeUpdate();
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE_PRIX_DE_VENTE);
+			pstmt.setInt(1, prixDeVente);
+			pstmt.setInt(2, id);
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -494,18 +487,15 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	/**
 	 * Méthode en charge d'update l'etat de vente de l'article en bd passant en
 	 * vente à vendu
-	 * 
-	 * @param article article a modifier
-	 * @throws BusinessException
-	 * @throws SQLException
 	 */
+
 	public void updateEtatVente(Article article) throws BusinessException, SQLException {
 
 		try (Connection cnx = ConnectionProvider.getConnection()) {
-			PreparedStatement stm = cnx.prepareStatement(UPDATE_ETAT_VENTE);
-			stm.setBoolean(1, true);
-			stm.setInt(2, article.getNo_article());
-			stm.executeUpdate();
+			PreparedStatement pstmt = cnx.prepareStatement(UPDATE_ETAT_VENTE);
+			pstmt.setBoolean(1, true);
+			pstmt.setInt(2, article.getNo_article());
+			pstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -518,11 +508,6 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	 * methode verifie aussi que la date de fin d'enchere a expiré, si c'est le cas
 	 * elle update en bd le statut de la vente et verifie si une enchere a été passée
 	 * sur l'article. Auquel cas elle credite le vendeur du montant de l'offre
-	 * 
-	 * @param rs resulset après extraction en bd
-	 * @return un article
-	 * @throws SQLException
-	 * @throws BusinessException
 	 */
 	private Article articleConstructeur(ResultSet rs) throws SQLException, BusinessException {
 		Article article = new Article();
@@ -548,6 +533,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 				Utilisateurs utilisateurs = null;
 				utilisateurs = utilisateursManager.selectId(article.getNo_utilisateur());
 				utilisateursManager.AjouterCredit(utilisateurs, article.getPrix_vente());
+				//Ajouter methode ajouterCredit
 			}
 		}
 		return article;

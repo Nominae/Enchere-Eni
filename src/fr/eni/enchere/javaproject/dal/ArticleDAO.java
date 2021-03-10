@@ -73,7 +73,7 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 		public List<Article> selectVenteEnCour(int noUtilisateur) throws BusinessException;
 
 	
-		public List<Article> selectVenteNonDebute(int noUtilisateur) throws BusinessException;
+		//public List<Article> selectVenteNonDebute(int noUtilisateur) throws BusinessException;
 
 		
 		public void insertAvecCheminImg(Article article) throws BusinessException;

@@ -18,7 +18,7 @@ public class RetraitDAOJdbcImpl implements RetraitDAO {
 	
 	
 //Méthode INSERT_RETRAIT
-	public static Retrait InsertRetrait(Retrait AjoutRetrait) throws DALException {
+	public Retrait InsertRetrait(Retrait AjoutRetrait) throws DALException {
 			
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;

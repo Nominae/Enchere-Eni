@@ -5,6 +5,8 @@ import java.util.List;
 import fr.eni.enchere.javaproject.bo.Categorie;
 import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.dal.CategorieDAO;
+import fr.eni.enchere.javaproject.dal.DALException;
+
 
 
 
@@ -18,22 +20,22 @@ public class CategorieManager {
 		
 	}
 	
-	public void insertCategorie(int noCategorie, String libelle) {
+	public void insertCategorie(int noCategorie, String libelle) throws DALException {
 		Categorie categorie = new Categorie();
 		categorie.setNoCategorie(noCategorie);
 		categorie.setLibelle(libelle);
 		this.categorieDAO.insertCategorie(categorie);
 	}
 	
-	public List<Categorie> selectAllCat() {
-		return categorieDAO.selectAllCat();
+	public List<Categorie> selectAllCat() throws DALException {
+		return categorieDAO.selectAllcat();
 	}
 	
-	public void deleteCategorie(int noCategorie) {
-		this.categorieDAO.supprimerCategorie(noCategorie);
+	public void deleteCategorie(int noCategorie) throws DALException {
+		this.categorieDAO.deleteCategorie(noCategorie);
 	}
 	
-	public void deleteCategorie(String libelle) {
-		this.categorieDAO.supprimerCategorie(libelle);
+	public void deleteCategorie(String libelle) throws DALException {
+		this.categorieDAO.deleteCategorie(libelle);
 	}
 }

@@ -181,12 +181,13 @@ public class ArticleManager {
 	/**
 	 * M�thode en charge de selectionner tout les articles mise en vente par
 	 * l'utilisateur ou l'enchere n'a pas debut�e
-	 */
+	 
 	public List<Article> selectVenteNonDebute(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		articles = this.articleDao.selectVenteNonDebute(noUtilisateur);
 		return articles;
 	}
+	*/
 
 	/**
 	 * M�thode en charge d'update un article

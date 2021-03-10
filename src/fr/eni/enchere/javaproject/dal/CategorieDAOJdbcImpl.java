@@ -10,6 +10,7 @@ import java.util.List;
 
 import fr.eni.enchere.javaproject.bo.Categorie;
 import fr.eni.enchere.javaproject.dal.DALException;
+import fr.eni.enchere.javaproject.utils.BusinessException;
 
 public class CategorieDAOJdbcImpl implements CategorieDAO {
 
@@ -22,7 +23,8 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 
 // Méthode SelectAll
-	public static List<Categorie> selectAll() throws DALException {
+	@Override
+	public List<Categorie> selectAllcat() throws DALException {
 		List<Categorie> ListeCategorie = new ArrayList<Categorie>();
 		
 		Statement stmt = null;
@@ -55,7 +57,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 
 // Méthode SelectById
-	public static Categorie selectByIdCat(int noCategorie) throws DALException {
+	public Categorie selectByIdCat(int noCategorie) throws DALException {
 
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -154,7 +156,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 // méthode DELETE_CAT_BY_NUM
 
-	public void supprimerCategorie(int noCategorie) throws DALException {
+	public void deleteCategorie(int noCategorie) throws DALException {
 		
 		PreparedStatement pstmt = null;
 	
@@ -184,7 +186,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 
 // Méthode DELETE_CAT_BY_LIBELLE
 	
-	public void supprimerCategorie(String libelle) throws DALException {
+	public void deleteCategorie(String libelle) throws DALException {
 		
 		PreparedStatement pstmt = null;
 		
@@ -209,6 +211,6 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 					
 				}
 			}
-		}  
+		}
+	}
 		
-	} 

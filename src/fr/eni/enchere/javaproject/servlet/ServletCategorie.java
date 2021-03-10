@@ -17,7 +17,7 @@ import fr.eni.enchere.javaproject.bo.Categorie;
 /**
  * Servlet implementation class ServletCategorie
  */
-@WebServlet("/connexion2")
+@WebServlet("/connexion")
 public class ServletCategorie extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

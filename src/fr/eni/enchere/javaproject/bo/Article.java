@@ -1,7 +1,7 @@
 package fr.eni.enchere.javaproject.bo;
-import java.sql.Date;
-import java.sql.Timestamp;
 
+
+import java.sql.Date;
 
 public class Article {
 	int no_article;

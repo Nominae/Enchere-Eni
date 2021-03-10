@@ -14,11 +14,11 @@
 		<br>
 		<div>
 			<form action="" method="get" class="form">
-			    <label for="pseudo">Pseudo : </label>
-			    <input type="text" value="<%=request.getParameter("pseudo")%>" name="pseudo" id="pseudo" required><br>
+			    <label for="emailoupseudo">Email ou Pseudo : </label>
+			    <input type="text" value="<%=request.getParameter("emailoupseudo")%>" name="emailoupseudo" id="emailoupseudo" required><br>
 			    
-			    <label for="email">Email : </label>
-			    <input type="email" value="<%=request.getParameter("email")%>" name="email" id="email" required><br>
+			  	<!--<label for="email">Email : </label>
+			    <input type="email" value="<%=request.getParameter("email")%>" name="email" id="email" required><br>--> 
 			    
 			    <label for="mdp">Mot de passe : </label>
 			    <input type="password" value="<%=request.getParameter("motDePasse")%>" name="mdp" id="mdp" required><br>
@@ -32,5 +32,7 @@
 		<div>
 			<a href="/Eclipse/Enchere-Eni/WebContent/Page Connexion/pageCreerCompte.html">Créer un compte</a>
 		</div>
+		<p class="erreur">${message}</p>
+    	<p class="succes">${success}</p>
 	</body>
 </html>
