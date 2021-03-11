@@ -10,7 +10,7 @@
         <nav>
             <a href="<%=request.getContextPath()%>/AcceuilConnecte">ENI-Encheres</a>
             <a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageListeEncheresConnecte.html">Enchères</a>
-            <a href="/Eclipse/Enchere-Eni/WebContent/Page Vente/pageVendreUnArticle.html">Vendre un article</a>
+            <a href="<%=request.getContextPath()%>/VenteArticle">Vendre un article</a>
             <a href="<%=request.getContextPath()%>/AfficherProfil">Mon profil</a>
             <a href="<%=request.getContextPath()%>/Deconnection">Déconnexion</a>
 

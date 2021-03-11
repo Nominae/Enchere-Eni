@@ -171,7 +171,6 @@ public class RetraitDAOJdbcImpl implements RetraitDAO {
 
 	@Override
 	public void deleteRetrait(int noArticle) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -16,14 +16,16 @@
 		<br>
 		<div>
 			<form action="<%=request.getContextPath()%>/ModificationProfil" method="post" class="form">
+				<input type="hidden" name="noUtilisateur" value="${utilisateur.noUtilisateur}">
+				
 			    <label for="pseudo">Pseudo : ${utilisateur.pseudo}</label>
 			    <input type="text" value="" name="pseudo" id="pseudo">
 			    
 			    <label for="nom">Nom : ${utilisateur.nom}</label>
-			    <input type="text" value="" id="nom"><br>
+			    <input type="text" value="" name="nom" id="nom"><br>
 			    
-			    <label for="prénom">Prénom : ${utilisateur.prenom}</label>
-			    <input type="text" value="" name="prénom" id="prénom">
+			    <label for="prenom">Prénom : ${utilisateur.prenom}</label>
+			    <input type="text" value="" name="prenom" id="prenom">
 			    
 			    <label for="email">Email : ${utilisateur.email}</label>
 			    <input type="email" value="" name="email" id="email"><br>
@@ -47,6 +49,8 @@
 			    <input type="password" value="" name="verifMdp" id="verifMdp"><br>
 			    
 			    <p>Crédit<b> ${utilisateur.credit}</b></p>
+			    
+			    <p>${utilisateur.noUtilisateur}</p>
 			    
 			    <a href="<%=request.getContextPath()%>/AfficherProfil"><input type="submit" value="Enregistrer"></a>
 			    <a href="<%=request.getContextPath()%>/NonConnecte"><input type="reset" value="Supprimer mon compte"></a>

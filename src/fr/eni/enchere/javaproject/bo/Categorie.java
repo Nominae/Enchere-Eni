@@ -1,6 +1,5 @@
 package fr.eni.enchere.javaproject.bo;
 
-import java.io.Serializable;
 
 public class Categorie{
 		

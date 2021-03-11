@@ -17,6 +17,7 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 	private static final String DELETE_USER = "DELETE FROM UTILISATEURS WHERE no_utilisateur = ?";
 	private static final String SELECT_EMAIL = "SELECT email FROM UTILISATEURS";
 	private static final String SELECT_PSEUDO = "SELECT pseudo FROM UTILISATEURS";
+	//TODO: SELECT PASSWORD utilisé ou non ?
 	private static final String SELECT_PASSWORD = "SELECT motDePasse FROM UTILISATEURS WHERE email = ?";
 	private static final String SELECT_LOGIN = "SELECT * from UTILISATEURS where (email = ? or pseudo = ?) AND mot_de_passe = ?";
 	private static final String VERIF_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ?  AND no_utilisateur <> ?";

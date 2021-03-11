@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<!--<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -7,18 +7,20 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="UTF-8">
 <title>Vendre un article</title>
 
 </head>
 <body>
+<nav>
+	<a href="<%=request.getContextPath()%>/AcceuilConnecte">ENI-Encheres</a>
+</nav>	
 <h1>Nouvelle vente</h1>
 <main class="container">
 <div class=" container-fluid text-center">
-	<img class="container col-md-6" alt="Photo de l'article mis en vente."  width="555" height="525" src="https://media.giphy.com/media/Zcc3ZeeZ5ztdw1oNSB/giphy.gif">
+	<img class="container col-md-6" alt="Photo de l'article mis en vente." width="255" height="200"  src="https://media.giphy.com/media/l2JdUrmFPxNZZiWYM/giphy.gif">
 </div>
-<div class=" container col-md-6">
-<form class="container form-horizontal" action="Vente" method="post" enctype="multipart/form-data"> 
+<div class="container col-md-6">
+<form class="container form-horizontal" action="<%=request.getContextPath()%>/VenteArticle" method="post"> 
 	  <div class="form-row">
 	    <div class="form-group col-md-6">
 	      <label for="article">Article</label>
@@ -33,14 +35,11 @@
      </div>
      <div class="mr-sm-3">
 	<label for="categorie">Categorie : </label>
-	<SELECT name="categorie" id="categorie">
-		<c:forEach var="categorie" items="${categorie}">
-			<OPTION value="${categorie.noCategorie}">${categorie.libelle}</OPTION>
+	<select name="categorie">
+		<c:forEach var="categories" items="${categories}">
+			<option value="${categories.noCategorie}">${categories.libelle}</option>
 		</c:forEach>
-		<c:forEach var="categorie" items="${categorie}">
-			<OPTION value="${categorie.noCategorie}">${categorie.libelle}</OPTION>
-		</c:forEach>
-	</SELECT>
+	</select>
 	</div>  
 	 <div class="form-row">
 	    <div class="form-group col-md-6">
@@ -50,7 +49,7 @@
      </div>
   		 <div class="form-row">
 	    <div class="form-group col-md-6">
-	      <label for="photo">Mise à prix</label>
+	      <label for="prixInitial">Mise à prix</label>
 	      <input type="number" id="prixInitial" name="prixInitial" min="0" >
 	    </div>
      </div>
@@ -92,11 +91,11 @@
      <div class="form-row align-self-center">
      <input type="hidden" name="numeroUtilisateur" value="${ utilisateur.noUtilisateur }">
 		  <button type="submit" class="btn btn-primary">Enregistrer</button>
-		  <button type="reset" class="btn btn-primary">Annuler</button>
+		  <button type="reset" class="btn btn-primary"><a href="<%=request.getContextPath()%>/AcceuilConnecte">Annuler</a></button>
 	   </div>
 </form>
 </div>
 <p> ${ erreurs } </p>
 </main>
 </body>
-</html>
+</html>-->

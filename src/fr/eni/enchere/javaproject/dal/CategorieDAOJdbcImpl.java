@@ -56,7 +56,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 		return ListeCategorie;
 		}
 
-
+	
 // Méthode SelectById
 	public Categorie selectByIdCat(int noCategorie) throws DALException {
 

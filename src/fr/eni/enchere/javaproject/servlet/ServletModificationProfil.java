@@ -46,8 +46,10 @@ public class ServletModificationProfil extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	
+	int noUtilisateur = Integer.parseInt(request.getParameter("noUtilisateur"));
 	String pseudo = request.getParameter("pseudo");
 	String nom = request.getParameter("nom");
 	String prenom = request.getParameter("prenom");
@@ -62,7 +64,7 @@ public class ServletModificationProfil extends HttpServlet {
 	Utilisateurs utilisateurModif = null;
 	
 	if (motDePasse.equals(verifMdp)) {
-		Utilisateurs utilisateur = new Utilisateurs(pseudo, nom, prenom, email, telephone, rue, codePostal, ville,
+		Utilisateurs utilisateur = new Utilisateurs(noUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville,
 				motDePasse, 0, false);
 		try {
 			utilisateurModif = utilisateursManager.update(utilisateur);
