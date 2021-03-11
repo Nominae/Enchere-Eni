@@ -9,43 +9,43 @@
 	</head>
 	<body>
 		<nav>
-			<a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageAccueilNonConnecte.html">ENI-Encheres</a>
+			<a href="<%=request.getContextPath()%>/NonConnecte">ENI-Encheres</a>
 		</nav>
 		<br>
 		<br>
 		<h2>Mon profil</h2>
 		<br>
 		<div>
-			<form action="<%=request.getContextPath()%>/connexion" method="post" class="form">
+			<form action="<%=request.getContextPath()%>/creationcompte" method="post" class="form">
 			    <label for="pseudo">Pseudo : </label>
-			    <input type="text" value="<%=request.getParameter("pseudo")%>" name="pseudo" id="pseudo" required>
+			    <input type="text" name="pseudo" id="pseudo" required>
 			    
 			    <label for="nom">Nom : </label>
-			    <input type="text" value="<%=request.getParameter("nom")%>nom" name="nom" id="nom" required><br>
+			    <input type="text" nom" name="nom" id="nom" required><br>
 			    
 			    <label for="prenom">Prénom : </label>
-			    <input type="text" value="<%=request.getParameter("prenom")%>prenom" name="prenom" id="prenom" required>
+			    <input type="text" name="prenom" id="prenom" required>
 			    
 			    <label for="email">Email : </label>
-			    <input type="email" value="<%=request.getParameter("email")%>" name="email" id="email" required><br>
+			    <input type="email" name="email" id="email" required><br>
 			    
 			    <label for="telephone">Téléphone : </label>
-			    <input type="tel" value="<%=request.getParameter("telephone")%>" name="telephone" id="telephone" required>
+			    <input type="tel" name="telephone" id="telephone" required>
 			    
 			    <label for="rue">Rue : </label>
-			    <input type="text" value="<%=request.getParameter("rue")%>" name="rue" id="rue" required><br>
+			    <input type="text" name="rue" id="rue" required><br>
 			    
 			    <label for="codePostal">Code postal : </label>
-			    <input type="number" value="<%=request.getParameter("codePostal")%>" name="codePostal" id="codePostal" required>
+			    <input type="number" name="codePostal" id="codePostal" required>
 			    
 			    <label for="ville">Ville : </label>
-			    <input type="text" value="<%=request.getParameter("ville")%>" name="ville" id="ville" required><br>
+			    <input type="text" name="ville" id="ville" required><br>
 			    
 			    <label for="motDePasse">Mot de passe : </label>
-			    <input type="password" value="<%=request.getParameter("motDePasse")%>" name="motDePasse" id="motDePasse" required>
+			    <input type="password" name="motDePasse" id="motDePasse" required>
 			    
 			    <label for="confirmMotDePasse">Confirmation : </label>
-			    <input type="password" value="<%=request.getParameter("confirmMotDePasse")%>" name="confirmMotDePasse" id="confirmMotDePasse" required><br>
+			    <input type="password" name="confirmMotDePasse" id="confirmMotDePasse" required><br>
 			    
 			    <a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageListeEncheresConnecte.html"><input type="submit" value="Créer"></a>
 			    <a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageAccueilNonConnecte.html"><input type="reset" value="Annuler" ></a>

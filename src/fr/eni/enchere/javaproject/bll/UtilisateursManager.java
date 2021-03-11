@@ -1,7 +1,6 @@
 package fr.eni.enchere.javaproject.bll;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.sql.SQLException;
 
 
@@ -12,6 +11,8 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 
 
 public class UtilisateursManager {
+	
+	private static UtilisateursManager instance;
 	
 	private UtilisateursDAO utilisateursDAO;
 		
@@ -85,8 +86,6 @@ public class UtilisateursManager {
 			
 			utilisateur = utilisateursDAO.selectLogin(EmailouPseudo, motDePasse);
 			
-			System.out.println(utilisateur);
-			
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -116,8 +115,6 @@ public class UtilisateursManager {
 	           
 	        	utilisateurExist= true;
 	         
-	        	System.out.println(verifEmail);
-	        	System.out.println(verifPseudo);
 	        }
 	
 	    } catch (Exception e) {
@@ -185,6 +182,40 @@ public class UtilisateursManager {
 				businessException.ajouterErreur(CodeResultatBll.CREDIT_INVALIDE);
 			}
 		}
+
+		public static UtilisateursManager getInstance() {
+			if (instance == null) {
+	            return new UtilisateursManager();
+	        }
+	        return instance;
+		}
+		
+		public Utilisateurs update(Utilisateurs utilisateur) throws Exception {
+	        
+			Utilisateurs utilisateurReturn = null;
+	        
+	        boolean verifEmail = utilisateursDAO.verifEmail(utilisateur.getEmail(), utilisateur.getNoUtilisateur());
+	        boolean verifPseudo = utilisateursDAO.verifPseudo(utilisateur.getPseudo(), utilisateur.getNoUtilisateur());
+	        
+	        if ((verifEmail) & (verifPseudo)) {
+	            throw new Exception("L'email et le pseudo sont déjà présent en base");
+	        } else if ((verifEmail) & (!verifPseudo)) {
+	            throw new Exception("L'email saisi est déjà utilisé");
+	        } else if ((!verifEmail) & (verifPseudo)) {
+	            throw new Exception("Le pseudo est déjà pris");
+	        } else {
+	            try {
+	            	
+	                utilisateurReturn = utilisateursDAO.updateUser(utilisateur);
+	                
+	            } catch (Exception e) {
+	            	
+	            	e.printStackTrace();
+	            	
+	            }
+	        }
+	        return utilisateurReturn;
+	    }
 
 	}
 	

@@ -59,7 +59,7 @@ public class ServletConnexion extends HttpServlet {
 		String save = null;
 		Utilisateurs utilisateur = null;
 		
-		EmailouPseudo = request.getParameter("EmailouPseudo").trim();
+		EmailouPseudo = request.getParameter("EmailouPseudo");
 		motDePasse = request.getParameter("motDePasse");
 		save = request.getParameter("save");
 		
@@ -76,21 +76,25 @@ public class ServletConnexion extends HttpServlet {
 		
 		try {
 	           utilisateur = newUser.getUtilisateursLogin(EmailouPseudo, motDePasse);
+	           System.out.println(EmailouPseudo);
+	           System.out.println(motDePasse);
 	           if(utilisateur == null) {
-	                String error = "Mot de passe ou pseudo incorrect";
+	                String error = "Mot de passe ou Pseudo incorrect";
 	                request.setAttribute("message", error);
-	                request.getRequestDispatcher("/WEB-INF/Pages/Connection.jsp").forward(request,response);
+	                request.getRequestDispatcher("/WEB-INF/connexion/Connexion.jsp").forward(request,response);
 	                
 	            } else {
 	                HttpSession session = request.getSession();
 	                session.setAttribute("utilisateur", utilisateur);
-	                response.sendRedirect("/WEB-INF/Pages/AcceuilConnecte.jsp");
+	                //response.sendRedirect("/WEB-INF/connexion/AcceuilConnecte.jsp");
+	                request.getRequestDispatcher("/WEB-INF/connexion/AcceuilConnecte.jsp").forward(request, response);
+	                
+	                
+	                
 	            }
 	        } catch (Exception e) {
-	            e.printStackTrace();
+	        	e.printStackTrace();
 	        }
-		
-		doGet(request, response);
 	}
 
 }

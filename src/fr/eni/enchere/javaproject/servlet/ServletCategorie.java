@@ -1,4 +1,4 @@
-package fr.eni.enchere.javaproject.servlet;
+/**package fr.eni.enchere.javaproject.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,28 +12,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import fr.eni.enchere.javaproject.bll.CategorieManager;
-import fr.eni.enchere.javaproject.bo.Categorie;
+import fr.eni.enchere.javaproject.bo.Categorie;**/
 
 /**
  * Servlet implementation class ServletCategorie
  */
-@WebServlet("/connexion")
+/**@WebServlet("/connexion")
 public class ServletCategorie extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/**protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/Categorie.jsp");
 		
 		rd.forward(request, response);
-	}
+	}**/
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	/**protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CategorieManager cm = new CategorieManager();
 		String param = request.getParameter("ajoutcategorie");
 		String nouvelleCategorie = request.getParameter("nouvelleCategorie");
@@ -65,4 +65,4 @@ public class ServletCategorie extends HttpServlet {
 		doGet(request, response);
 	}
 
-}
+}**/

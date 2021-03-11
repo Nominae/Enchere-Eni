@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.eni.enchere.javaproject.bo.Categorie;
-import fr.eni.enchere.javaproject.dal.DALException;
 import fr.eni.enchere.javaproject.utils.BusinessException;
 
 public class CategorieDAOJdbcImpl implements CategorieDAO {
@@ -20,6 +19,8 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 	private final static String INSERT_CAT = "insert into CATEGORIES(no_categorie, libelle (?;?);";
 	private final static String DELETE_CAT_BY_NUM = "delete from CATEGORIES where no_categorie = ?;";
 	private final static String DELETE_CAT_BY_LIBELLE = "delete from CATEGORIES where libellE = ?;";
+	private static final String SELECT_ALL = "select * from CATEGORIES";
+
 
 
 // Méthode SelectAll
@@ -69,7 +70,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 			
 			pstmt.setInt(1, noCategorie);
 			rs = pstmt.executeQuery();
-			
+			//TODO: CATEGORIE NULL
 			while (rs.next()) {
 				categorie.setNoCategorie(rs.getInt("no_categorie"));
 				categorie.setLibelle(rs.getString("libelle"));
@@ -212,5 +213,24 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 				}
 			}
 		}
+		
+		@Override
+	public List<Categorie> selectAll() throws BusinessException, SQLException {
+		List<Categorie> categories = new ArrayList<Categorie>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {
+				categories.add(this.categorieConstructeur(rs));
+			}
+		}
+		return categories;
+	}
+	private Categorie categorieConstructeur(ResultSet rs) throws SQLException {
+		Categorie categorie = new Categorie();
+		categorie.setNoCategorie(rs.getInt("no_categorie"));
+		categorie.setLibelle(rs.getString("libelle"));
+		return categorie;
+	}
 	}
 		

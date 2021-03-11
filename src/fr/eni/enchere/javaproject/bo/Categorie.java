@@ -2,16 +2,15 @@ package fr.eni.enchere.javaproject.bo;
 
 import java.io.Serializable;
 
-public class Categorie	implements Serializable {
+public class Categorie{
 		
 	
-		private static final long serialVersionUID = 1L;
 		private int noCategorie;
 		private String libelle;
 		
 		// Constructeur par défaut
 		public Categorie() {
-			
+			super();
 		}
 		
 		//Constructeur prenant en compte tous les paramètres

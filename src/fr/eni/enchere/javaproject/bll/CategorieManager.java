@@ -1,11 +1,15 @@
 package fr.eni.enchere.javaproject.bll;
 
 import java.util.List;
+import java.sql.SQLException;
+
 
 import fr.eni.enchere.javaproject.bo.Categorie;
 import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.dal.CategorieDAO;
 import fr.eni.enchere.javaproject.dal.DALException;
+import fr.eni.enchere.javaproject.utils.BusinessException;
+
 
 
 
@@ -38,4 +42,9 @@ public class CategorieManager {
 	public void deleteCategorie(String libelle) throws DALException {
 		this.categorieDAO.deleteCategorie(libelle);
 	}
+	
+	public List<Categorie> selectAll() throws BusinessException, SQLException {
+			List<Categorie> categories = this.categorieDAO.selectAll();
+			return categories;
+		}
 }

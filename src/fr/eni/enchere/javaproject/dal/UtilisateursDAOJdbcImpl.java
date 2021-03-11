@@ -14,13 +14,13 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 
 	private static final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, credit = ?, administrateur = ?";
-	private static final String DELETE_USER = "DELETE FROM UTILISATEURS WHERE noUtilisateur = ?";
+	private static final String DELETE_USER = "DELETE FROM UTILISATEURS WHERE no_utilisateur = ?";
 	private static final String SELECT_EMAIL = "SELECT email FROM UTILISATEURS";
 	private static final String SELECT_PSEUDO = "SELECT pseudo FROM UTILISATEURS";
 	private static final String SELECT_PASSWORD = "SELECT motDePasse FROM UTILISATEURS WHERE email = ?";
-	private static final String SELECT_LOGIN = "SELECT * from UTILISATEURS where (email=? or pseudo=?) AND motDePasse=?";
-	private static final String VERIF_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ?  AND id <> ?";
-	private static final String VERIF_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ?  AND id <> ?";
+	private static final String SELECT_LOGIN = "SELECT * from UTILISATEURS where (email = ? or pseudo = ?) AND mot_de_passe = ?";
+	private static final String VERIF_EMAIL = "SELECT * FROM UTILISATEURS WHERE email = ?  AND no_utilisateur <> ?";
+	private static final String VERIF_PSEUDO = "SELECT * FROM UTILISATEURS WHERE pseudo = ?  AND no_utilisateur <> ?";
 
 	// AJOUT
 	private static final String UPDATE_CREDIT = "update UTILISATEURS Set credit=? where no_utilisateur=?";
@@ -86,7 +86,7 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 	}
 
 	@Override
-	public void updateUser(Utilisateurs utilisateurs) {
+	public Utilisateurs updateUser(Utilisateurs utilisateurs) {
 
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
@@ -142,6 +142,7 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 
 			}
 		}
+		return utilisateurs;
 	}
 
 	@Override
@@ -309,9 +310,6 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 
 			rs = pstmt.executeQuery();
 
-			System.out.println(EmailouPseudo);
-			System.out.println(motDePasse);
-
 			if (rs.next()) {
 				utilisateur = utilisateurBuilder(rs);
 			}
@@ -330,16 +328,16 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 
 		try {
 
-			utilisateur.setNoUtilisateur(rs.getInt("noUtilisateur"));
+			utilisateur.setNoUtilisateur(rs.getInt("no_utilisateur"));
 			utilisateur.setPseudo(rs.getString("pseudo"));
 			utilisateur.setNom(rs.getString("nom"));
 			utilisateur.setPrenom(rs.getString("prenom"));
 			utilisateur.setEmail(rs.getString("email"));
 			utilisateur.setTelephone(rs.getString("telephone"));
 			utilisateur.setRue(rs.getString("rue"));
-			utilisateur.setCodePostal(rs.getString("codePostal"));
+			utilisateur.setCodePostal(rs.getString("code_postal"));
 			utilisateur.setVille(rs.getString("ville"));
-			utilisateur.setMotDePasse(rs.getString("motDePasse"));
+			utilisateur.setMotDePasse(rs.getString("mot_de_passe"));
 			utilisateur.setCredit(rs.getInt("credit"));
 			utilisateur.setAdministrateur(rs.getBoolean("administrateur"));
 
@@ -432,7 +430,6 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 			stm.executeUpdate();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

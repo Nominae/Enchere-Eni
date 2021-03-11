@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import fr.eni.enchere.javaproject.bo.Article;
-import fr.eni.enchere.javaproject.bo.Utilisateurs;
 import fr.eni.enchere.javaproject.utils.BusinessException;
 
 

@@ -59,6 +59,7 @@ public class ServletCreationCompte extends HttpServlet {
 		confirmMotDePasse = request.getParameter("confirmMotDePasse").trim();
 		
 		Utilisateurs user = new Utilisateurs(pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, 0, false); 
+		
 		try {
 			
 			newUser.insertUser(0, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, confirmMotDePasse, 0, false);

@@ -4,6 +4,7 @@ import fr.eni.enchere.javaproject.bo.Retrait;
 import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.dal.RetraitDAO;
 import fr.eni.enchere.javaproject.utils.BusinessException;
+import fr.eni.enchere.javaproject.dal.DALException;
 
 
 public class RetraitManager {
@@ -15,7 +16,7 @@ public class RetraitManager {
 		this.RetraitDAO = DAOFactory.getRetraitDAO();
 	}
 	
-	public void InsertRetrait(int noArticle, String Rue, String CodePostal, String Ville ) {
+	public void InsertRetrait(int noArticle, String Rue, String CodePostal, String Ville ) throws DALException {
 		Retrait retrait = new Retrait();
 		retrait.setNoArticle(noArticle);
 		retrait.setRue(Rue);
@@ -24,7 +25,7 @@ public class RetraitManager {
 		this.RetraitDAO.InsertRetrait(retrait);
 	}
 		
-	public void updateRetrait(Retrait MajRetrait) {
+	public void updateRetrait(Retrait MajRetrait)  throws DALException {
 		this.RetraitDAO.updateRetrait(MajRetrait);
 	}
 	

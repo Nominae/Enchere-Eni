@@ -8,31 +8,29 @@
 	</head>
 	<body>
 		<nav>
-			<a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageAccueilNonConnecte.html">ENI-Encheres</a>
+			<a href="<%=request.getContextPath()%>/NonConnecte">ENI-Encheres</a>
 		</nav>
 		<br>
+		<p class="erreur">${message}</p>
 		<br>
 		<div>
-			<form action="" method="get" class="form">
-			    <label for="emailoupseudo">Email ou Pseudo : </label>
-			    <input type="text" value="<%=request.getParameter("emailoupseudo")%>" name="emailoupseudo" id="emailoupseudo" required><br>
+			<form action="<%=request.getContextPath()%>/Validation" method="POST" class="form">
+			   
+			    <label for="EmailouPseudo">Email ou Pseudo : </label>
+			    <input type="text" name="EmailouPseudo" id="EmailouPseudo" required><br>
 			    
-			  	<!--<label for="email">Email : </label>
-			    <input type="email" value="<%=request.getParameter("email")%>" name="email" id="email" required><br>--> 
-			    
-			    <label for="mdp">Mot de passe : </label>
-			    <input type="password" value="<%=request.getParameter("motDePasse")%>" name="mdp" id="mdp" required><br>
+			    <label for="motDePasse">Mot de passe : </label>
+			    <input type="password" name="motDePasse" id="motDePasse" required><br>
 			    
 			    <a href="/Eclipse/Enchere-Eni/WebContent/Page Accueil/pageListeEncheresConnecte.html"><input type="submit" value="Connexion"></a>
 			    
 			    <input type="checkbox" id="save" name="save">
  				<label for="save">Se souvenir de moi</label><br>
+ 				
 			</form>
 		</div>
 		<div>
-			<a href="/Eclipse/Enchere-Eni/WebContent/Page Connexion/pageCreerCompte.html">Créer un compte</a>
+			<a href="<%=request.getContextPath()%>/creationcompte">Créer un compte</a>
 		</div>
-		<p class="erreur">${message}</p>
-    	<p class="succes">${success}</p>
 	</body>
 </html>

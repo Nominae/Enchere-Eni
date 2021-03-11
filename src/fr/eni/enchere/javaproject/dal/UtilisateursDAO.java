@@ -11,7 +11,7 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 public interface UtilisateursDAO {
 
 	public void insertUser(Utilisateurs utilisateurs);
-	public void updateUser(Utilisateurs utilisateurs);
+	public Utilisateurs updateUser(Utilisateurs utilisateurs);
 	public void deleteUser(int noUtilisateur);
 	public ArrayList<String> selectAllEmail();
 	public ArrayList<String> selectAllPseudo();

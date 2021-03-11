@@ -1,25 +1,18 @@
 package fr.eni.enchere.javaproject.dal;
 
-import java.net.URISyntaxException;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import fr.eni.enchere.javaproject.bll.EnchereManager;
 import fr.eni.enchere.javaproject.bll.UtilisateursManager;
 import fr.eni.enchere.javaproject.bo.Article;
-import fr.eni.enchere.javaproject.bo.Categorie;
 import fr.eni.enchere.javaproject.bo.Enchere;
-import fr.eni.enchere.javaproject.bo.Retrait;
 import fr.eni.enchere.javaproject.bo.Utilisateurs;
-import fr.eni.enchere.javaproject.dal.ArticleDAO;
 import fr.eni.enchere.javaproject.utils.BusinessException;
 
 

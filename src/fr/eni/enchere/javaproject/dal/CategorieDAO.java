@@ -16,7 +16,8 @@ public interface CategorieDAO {
 	
 	//10/03
 	public void update(Categorie categorie) throws DALException ;
-	
+	public List<Categorie> selectAll() throws BusinessException, SQLException;
+
 
 	
 		
