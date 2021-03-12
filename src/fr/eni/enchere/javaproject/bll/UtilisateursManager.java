@@ -221,6 +221,7 @@ public class UtilisateursManager {
 			
 			boolean verifDelete = false;
 			try {
+				System.out.println("UtilisateurManger DeleteUser");
 				verifDelete = utilisateursDAO.deleteUser(noUtilisateur);
 			} catch (Exception e) {
 

@@ -55,6 +55,7 @@ public class ArticleManager {
 				article.setNo_retrait(retrait.getNoRetrait());
 				this.articleDao.insert(article);
 			} else {
+				//TODO: 2 validations d'article à vérifier (modifier)
 				this.validerArticle(article, businessException);
 				if (!businessException.hasErreurs()) {
 					article.setEtatVente(false);

@@ -37,7 +37,7 @@ public class ServletDelete extends HttpServlet {
 		
 		rd.forward(request, response);
 		
-		
+		//TODO: NoUtilisateur a href ca passe par doget
 	}
 
 	/**
@@ -46,6 +46,7 @@ public class ServletDelete extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		int noUtilisateur = Integer.parseInt(request.getParameter("noUtilisateur"));
+		System.out.println("Numero utilisateur avant supp" + noUtilisateur);
 		boolean verifDelete = false;
 		System.out.println(noUtilisateur);
 		try {

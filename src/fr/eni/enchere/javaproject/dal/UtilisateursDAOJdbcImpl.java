@@ -158,7 +158,9 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		Connection cnx = null;
+		
 		try {
+			System.out.println("On rentre dans le try");
 			cnx = ConnectionProvider.getConnection();
 			pstmt = cnx.prepareStatement(DELETE_USER);
 			pstmt.setInt(1, id);

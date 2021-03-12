@@ -38,14 +38,22 @@
 
 
 	
-	    <h1>Liste des enchères</h1>
-	    <br>
-	    <br>
-	    <div>
-	    	<label for="site-search">Filtres :</label>
-	        <input type="search" id="site-search" name="recherche" aria-label="Le nom de l'article contient">
-	        <button>Rechercher</button>
-	    </div>
+	    <h1 class="text-center">Liste des enchères</h1>
+		<br>
+		<br>
+		<div class="col-auto">
+			<form class="row g-3 justify">
+				<div class="col-md-5">
+					<label class="col-md-5 row" for="site-search" >Filtres :</label><br>
+					<div class="plaintext col-auto">
+						<input class="form-control row" placeholder="Le nom de l'article contient" type="search" id="site-search" name="recherche" aria-label="Le nom de l'article contient">
+					</div>
+					<div class="col-md-5">
+						<button class="col-mb-5 btn btn-primary mb-3 row">Rechercher</button>
+					</div>
+				</div>
+			</form>	
+		</div>
 	    <br>
 	    <div>
 	        <label for="Selection-categorie">Catégorie :</label>
