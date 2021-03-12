@@ -13,7 +13,7 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 
 	private static final String INSERT_USER = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe, credit, administrateur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	private static final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ?, credit = ?, administrateur = ?";
+	private static final String UPDATE_USER = "UPDATE UTILISATEURS SET pseudo = ?, nom = ?, prenom = ?, email = ?, telephone = ?, rue = ?, code_postal = ?, ville = ?, mot_de_passe = ? WHERE no_utilisateur = ?";
 	private static final String DELETE_USER = "DELETE FROM UTILISATEURS WHERE no_utilisateur = ?";
 	private static final String SELECT_EMAIL = "SELECT email FROM UTILISATEURS";
 	private static final String SELECT_PSEUDO = "SELECT pseudo FROM UTILISATEURS";
@@ -87,40 +87,44 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 	}
 
 	@Override
-	public Utilisateurs updateUser(Utilisateurs utilisateurs) {
+	public Utilisateurs updateUser(Utilisateurs utilisateur) {
 
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		Connection cnx = null;
-
+		
+		 Utilisateurs utilisateurRecupere = null;
+		
 		try {
 
 			cnx = ConnectionProvider.getConnection();
-			pstmt = cnx.prepareStatement(UPDATE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, utilisateurs.getPseudo());
-			pstmt.setString(2, utilisateurs.getNom());
-			pstmt.setString(3, utilisateurs.getPrenom());
-			pstmt.setString(4, utilisateurs.getEmail());
-			pstmt.setString(5, utilisateurs.getTelephone());
-			pstmt.setString(6, utilisateurs.getRue());
-			pstmt.setString(7, utilisateurs.getCodePostal());
-			pstmt.setString(8, utilisateurs.getVille());
-			pstmt.setString(9, utilisateurs.getMotDePasse());
-			pstmt.setInt(10, 0);
-			pstmt.setBoolean(11, false);
+			pstmt = cnx.prepareStatement(UPDATE_USER);
+			
+			pstmt.setString(1, utilisateur.getPseudo());
+			pstmt.setString(2, utilisateur.getNom());
+			pstmt.setString(3, utilisateur.getPrenom());
+			pstmt.setString(4, utilisateur.getEmail());
+			pstmt.setString(5, utilisateur.getTelephone());
+			pstmt.setString(6, utilisateur.getRue());
+			pstmt.setString(7, utilisateur.getCodePostal());
+			pstmt.setString(8, utilisateur.getVille());
+			pstmt.setString(9, utilisateur.getMotDePasse());
+			pstmt.setInt(10, utilisateur.getNoUtilisateur());
 
 			pstmt.executeUpdate();
 
-			rs = pstmt.getGeneratedKeys();
-
-			if (rs.next()) {
-				utilisateurs.setNoUtilisateur(rs.getInt(1));
+			try {
+				utilisateurRecupere = DAOFactory.getUtilisateursDAO().selectId(utilisateur.getNoUtilisateur());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("1");
 			}
-
-		} catch (SQLException e) {
+			
+			
+		} catch (Exception e) {
 
 			e.printStackTrace();
-
+			System.out.println("2");
 		} finally {
 
 			try {
@@ -137,31 +141,40 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 					cnx.close();
 				}
 
-			} catch (SQLException e) {
+			} catch (Exception e) {
 
 				e.printStackTrace();
 
 			}
 		}
-		return utilisateurs;
+		return utilisateurRecupere;
 	}
 
 	@Override
-	public void deleteUser(int noUtilisateur) {
-
+	public boolean deleteUser (int noUtilisateur) {
+		boolean verifDelete = false;
+		Utilisateurs utilisateur = null;
 		int id = noUtilisateur;
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
 		Connection cnx = null;
 		try {
 			cnx = ConnectionProvider.getConnection();
-			pstmt = cnx.prepareStatement(DELETE_USER, PreparedStatement.RETURN_GENERATED_KEYS);
+			pstmt = cnx.prepareStatement(DELETE_USER);
 			pstmt.setInt(1, id);
 
 			pstmt.executeUpdate();
 
-			rs = pstmt.getGeneratedKeys();
-
+			try {
+				utilisateur = DAOFactory.getUtilisateursDAO().selectId(id);
+			} catch (BusinessException e) {
+				e.printStackTrace();
+			}
+			if(utilisateur == null){
+		        verifDelete = true;
+		      }else {
+		        verifDelete = false;
+		      }
 		} catch (SQLException e) {
 
 			e.printStackTrace();
@@ -188,7 +201,10 @@ public class UtilisateursDAOJdbcImpl implements UtilisateursDAO {
 
 			}
 		}
-
+		if(verifDelete == true) {
+			System.out.println("CPASLAMERDE");
+		}
+		return verifDelete;
 	}
 
 	public ArrayList<String> selectAllEmail() {

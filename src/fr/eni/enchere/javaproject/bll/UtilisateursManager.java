@@ -217,6 +217,22 @@ public class UtilisateursManager {
 	        return utilisateurReturn;
 	    }
 
+		public boolean deleteUser(int noUtilisateur) {
+			
+			boolean verifDelete = false;
+			try {
+				verifDelete = utilisateursDAO.deleteUser(noUtilisateur);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				
+			}
+			if(verifDelete == true) {
+				System.out.println("CPASLAMERDE");
+			}
+			return verifDelete;
+		}
+		
 	}
 	
 

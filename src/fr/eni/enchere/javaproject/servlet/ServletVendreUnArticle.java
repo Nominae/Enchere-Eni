@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +23,6 @@ import fr.eni.enchere.javaproject.bo.Retrait;
 import fr.eni.enchere.javaproject.bo.Utilisateurs;
 import fr.eni.enchere.javaproject.message.LecteurMessage;
 import fr.eni.enchere.javaproject.utils.BusinessException;
-
 
 /**
  * Servlet implementation class ServletNouvelleVente
@@ -62,7 +62,8 @@ public class ServletVendreUnArticle extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.getServletContext().getRequestDispatcher("/WEB-INF/Vente/pageVendreUnArticle.jsp").forward(request, response);
+		this.getServletContext().getRequestDispatcher("/WEB-INF/Vente/pageVendreUnArticle.jsp").forward(request,
+				response);
 	}
 
 	/**
@@ -72,10 +73,10 @@ public class ServletVendreUnArticle extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession();
-        Utilisateurs utilisateur = (Utilisateurs) session.getAttribute("utilisateur");
-		
+		Utilisateurs utilisateur = (Utilisateurs) session.getAttribute("utilisateur");
+
 		// Recuperer les parametres
 
 		String article = request.getParameter("article");
@@ -116,9 +117,15 @@ public class ServletVendreUnArticle extends HttpServlet {
 				}
 				request.setAttribute("erreurs", messageErreur);
 			}
-			this.getServletContext().getRequestDispatcher("/VenteArticle").forward(request, response);
-			return;
+			// this.getServletContext().getRequestDispatcher("/VenteArticle").forward(request,
+			// response);
+
+			RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/NonConnecte");
+
+			rd.forward(request, response);
+
 		}
+		System.out.println("YESSSSSS");
 		String MESSAGEREUSSITE = "Nouvelle article mis en vente avec succès";
 		request.setAttribute("réussite", MESSAGEREUSSITE);
 		// Afficher les articles de la base de données
@@ -130,8 +137,11 @@ public class ServletVendreUnArticle extends HttpServlet {
 			e.printStackTrace();
 		}
 		request.setAttribute("listeArticle", listeArticle);
-
-		this.getServletContext().getRequestDispatcher("/PageAccueil").forward(request, response);
+		
+		//RequestDispatcher rd = request.getRequestDispatcher("/PageAccueil");
+		//rd.forward(request, response);
+		RequestDispatcher rd = this.getServletContext().getRequestDispatcher("/AcceuilConnecte");
+		rd.forward(request, response);
 
 	}
 }

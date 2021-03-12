@@ -3,10 +3,7 @@ package fr.eni.enchere.javaproject.dal;
 
 /**
  * Classe de constante d'erreur
- * 
- * @author aurel
- * @version TPENIEnchere - v1.0
- * @date 14 janv. 2021 - 16:38:36
+ * Liste importé d'internet, modèle pour nos erreurs
  */
 public class CodesResultatDAL {
 

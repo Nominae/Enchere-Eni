@@ -68,8 +68,6 @@ public class ServletModificationProfil extends HttpServlet {
 				motDePasse, 0, false);
 		try {
 			utilisateurModif = utilisateursManager.update(utilisateur);
-		} catch (SQLException throwables) {
-			throwables.printStackTrace();
 		} catch (Exception e) {
 			error = e.getMessage();
 			e.printStackTrace();

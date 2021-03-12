@@ -11,33 +11,22 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 
 	public interface ArticleDAO extends GeneriqueDAO<Article> {
 
-		/**
-		 * {@inheritDoc}
-		 */
+		
 		@Override
 		public void delete(int id) throws BusinessException;
 
-		/**
-		 * {@inheritDoc}
-		 */
+		
 		@Override
 		public void insert(Article t) throws BusinessException;
 
-		/**
-		 * {@inheritDoc}
-		 */
+	
 		@Override
 		public Article selectId(int id) throws BusinessException;
 
-		/**
-		 * {@inheritDoc}
-		 */
+		
 		@Override
 		public List<Article> selectAll() throws BusinessException;
 
-		/**
-		 * {@inheritDoc}
-		 */
 		@Override
 		public void update(Article t, int id) throws BusinessException, SQLException;
 
@@ -75,6 +64,6 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 		//public List<Article> selectVenteNonDebute(int noUtilisateur) throws BusinessException;
 
 		
-		public void insertAvecCheminImg(Article article) throws BusinessException;
+		// public void insertAvecCheminImg(Article article) throws BusinessException;
 	}
 

@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import fr.eni.enchere.javaproject.bll.UtilisateursManager;
 import fr.eni.enchere.javaproject.bo.Utilisateurs;
@@ -65,6 +66,9 @@ public class ServletCreationCompte extends HttpServlet {
 			newUser.insertUser(0, pseudo, nom, prenom, email, telephone, rue, codePostal, ville, confirmMotDePasse, 0, false);
 			
 			request.setAttribute("user", user);
+			
+			HttpSession session = request.getSession();
+            session.setAttribute("utilisateur", user);
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/AcceuilConnecte.jsp");
 			rd.forward(request, response);

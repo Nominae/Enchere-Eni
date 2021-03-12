@@ -5,8 +5,6 @@ import java.util.ResourceBundle;
 
 /**
  * Cette classe permet de lire le contenu du fichier messages_erreur.properties
- * @author Administrator
- *
  */
 public class LecteurMessage {
 	private static ResourceBundle rb;
@@ -27,10 +25,7 @@ public class LecteurMessage {
 	{
 		
 	}
-	/**
-	 * @param code
-	 * @return
-	 */
+	
 	public static  String getMessageErreur(int code)
 	{
 		String message="";
@@ -42,7 +37,7 @@ public class LecteurMessage {
 			}
 			else
 			{
-				message="Problème à la lecture du fichier contenant les messages";
+				message="Problï¿½me ï¿½ la lecture du fichier contenant les messages";
 			}
 		}
 		catch (Exception e) {

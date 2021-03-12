@@ -4,175 +4,50 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.eni.enchere.javaproject.bo.Retrait;
 import fr.eni.enchere.javaproject.utils.BusinessException;
 
 public class RetraitDAOJdbcImpl implements RetraitDAO {
 
-	private final static String INSERT_RETRAIT = "insert into RETRAITS (no_article, rue, code_postal, ville) values (?,?,?,?);";
-	private final static String SELECT_BY_ID_RETRAIT = "select * from RETRAITS where no_article = ?;";
-	private final static String UPDATE_RETRAIT = "update RETRAITS SET no_article = ?, rue = ?, code_postal = ?, ville = ?";
-	private final static String DELETE_RETRAIT = "delete from RETRAITS where noArticle = ?;";
 	private static final String SELECT_VERIF_EXISTANCE = "select * from RETRAITS where rue=? and code_postal=? and ville=? ";
 	private static final String INSERT = "insert into RETRAITS (rue, code_postal, ville) " + "values(?,?,?)";
+	private static final String SELECT_ID = "select * from RETRAITS where no_retrait=?";
+	private static final String UPDATE = "update RETRAITS Set rue= ?,code_postal=?, ville=?  where no_retrait=?";
+	private static final String DELETE = "delete from RETRAITS where no_retrait=?";
+	private static final String SELECT_ALL = "select * from RETRAITS";
+
 
 
 
 	
-	
-	
-//Méthode INSERT_RETRAIT
 	@Override
-	public Retrait InsertRetrait(Retrait AjoutRetrait) throws DALException {
-			
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			Retrait retraitCree = null;
-			
-			try (Connection cnx = ConnectionProvider.getConnection()) {
-
-				pstmt = cnx.prepareStatement(INSERT_RETRAIT, PreparedStatement.RETURN_GENERATED_KEYS);
-				
-				pstmt.setInt(1, AjoutRetrait.getNoArticle());
-				pstmt.setString(2, AjoutRetrait.getRue());
-				pstmt.setString(3, AjoutRetrait.getCodePostal());
-				pstmt.setString(4, AjoutRetrait.getVille());
-
-				rs = pstmt.getGeneratedKeys();
-				
-				if(rs.next()) {
-					AjoutRetrait.setNoArticle(rs.getInt(1));
-				}
-				
-				pstmt.executeUpdate();
-				
-			} catch (SQLException e) {
-				throw new DALException ("Impossible d'ajouter un retrait " + e.getMessage());
-			
-			}finally{
-			
-				try {
-					if (rs != null) rs.close();
-					if (pstmt!=null) pstmt.close();
-					
-			} catch (SQLException e) {
-					throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
-					
-				}
-		}
-			return retraitCree;
-	}
-		
-
-//Méthode UPDATE_RETRAIT 
-	@Override
-	public void updateRetrait(Retrait MajRetrait) throws DALException {
-		ResultSet rs = null;
-		PreparedStatement pstmt = null;
-		//TODO: RS BISARRE
-		try(Connection cnx = ConnectionProvider.getConnection()){
-			
-			pstmt = cnx.prepareStatement(UPDATE_RETRAIT);
-			
-			pstmt.setString(1, MajRetrait.getRue());
-			pstmt.setString(2, MajRetrait.getCodePostal());
-			pstmt.setString(3, MajRetrait.getVille());
-			
-			if(rs.next()) {
-				MajRetrait.setNoArticle(rs.getInt(1));
+	public Retrait selectId(int id) throws BusinessException {
+		Retrait retraits = null;
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ID);
+			stm.setInt(1, id);
+			ResultSet rs = stm.executeQuery();
+			if (rs.next()) {
+				retraits = this.retraitsConstructeur(rs);
+			} else {
+				BusinessException businessException = new BusinessException();
+				businessException.ajouterErreur(CodesResultatDAL.SELECT_ID_INEXISTANT);
+				throw businessException;
 			}
-			
-			pstmt.executeUpdate();
-			
-		}catch(SQLException e) {
-			throw new DALException("Impossible de mettre à jour l'adresse retrait" + e.getMessage());
-		
-		}finally {
-			
-			try {
-				
-				if (rs != null) rs.close();
-				if (pstmt != null) pstmt.close();
-				
-			} catch (SQLException e) {
-				throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
-				
-			}
-		}
-	} 	
-		
-
-//Méthode DELETE_RETRAIT 
-	@Override
-	public void deleteRetrait(Retrait DeleteRetrait) throws DALException {
-		
-		PreparedStatement pstmt = null;
-		
-		try (Connection cnx = ConnectionProvider.getConnection()){
-			pstmt = cnx.prepareStatement(DELETE_RETRAIT);
-		
-	        pstmt.setInt(1, DeleteRetrait.getNoArticle());
-	        
-			pstmt.executeUpdate();
-	
-		}catch(SQLException e) {
-			throw new DALException("Impossible de supprimer l'adresse de retrait" + e.getMessage());
-		
-		}finally {
-			
-			try {
-				if (pstmt != null) pstmt.close();
-				
-			} catch (SQLException e) {
-				throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
-				
-			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.CONNECTION_DAL);
+			throw businessException;
 		}
 
-	}
-
-//Méthode SELECT_BY_ID_RETRAIT
-	@Override
-	 public Retrait selectRetraitById(int noArticle) throws DALException {
-
-		 ResultSet rs = null;
-		 PreparedStatement pstmt = null;
-		 
-		 Retrait retrait = null;
-		 
-	     try (Connection cnx = ConnectionProvider.getConnection()){
-	    	 pstmt = cnx.prepareStatement(SELECT_BY_ID_RETRAIT);
-	    	 
-	    	 pstmt.setInt(1, noArticle);
-	         
-	         if (rs.next()) {
-	         	retrait.setNoArticle(rs.getInt(1));
-	         }
-	         
-	         ResultSet resultSet = pstmt.executeQuery();
-	         
-	     }catch(SQLException e) {
-				throw new DALException("Impossible de'afficher l'adresse de retrait" + e.getMessage());
-			
-			}finally {
-				
-				try {
-					if (pstmt != null) pstmt.close();
-					
-				} catch (SQLException e) {
-					throw new DALException("Fermeture de la connexion BDD ko" + e.getMessage());
-					
-				}
-			}   return retrait;
-
+		return retraits;
 	}
 
 
-	@Override
-	public void deleteRetrait(int noArticle) {
-		
-	}
 
 
 	@Override
@@ -194,7 +69,7 @@ public class RetraitDAOJdbcImpl implements RetraitDAO {
 				ResultSet rs = stm.getGeneratedKeys();
 
 				if (rs.next()) {
-					retrait.setNoArticle(rs.getInt(1));
+					retrait.setNoRetrait(rs.getInt(1));
 				}
 
 			} catch (SQLException e) {
@@ -211,7 +86,7 @@ public class RetraitDAOJdbcImpl implements RetraitDAO {
 	
 	private Retrait retraitsConstructeur(ResultSet rs) throws SQLException {
 		Retrait retrait = new Retrait();
-		retrait.setNoArticle(rs.getInt("no_retrait"));
+		retrait.setNoRetrait(rs.getInt("no_retrait"));
 		retrait.setRue(rs.getString("rue"));
 		retrait.setCodePostal(rs.getString("code_postal"));
 		retrait.setVille(rs.getString("ville"));
@@ -235,13 +110,65 @@ public class RetraitDAOJdbcImpl implements RetraitDAO {
 				businessException.ajouterErreur(CodesResultatDAL.CONNECTION_DAL);
 				throw businessException;
 			}
-			if (retrait.getNoArticle() == 0) {
+			if (retrait.getNoRetrait() == null) {
 				retrait = null;
 			}
 
 		}
 		return retrait;
 	}
+	
+	@Override
+	public void update(Retrait retrait, int id) throws BusinessException, SQLException {
+		if (retrait == null) {
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.UPDATE_OBJET_NULL);
+			throw businessException;
+		}
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(UPDATE);
+			stm.setString(1, retrait.getRue());
+			stm.setString(2, retrait.getCodePostal());
+			stm.setString(3, retrait.getVille());
+			stm.setInt(4, id);
+			stm.executeUpdate();
+
+		} catch (SQLException e) {
+			// TODO ERREUR UPDATE NON VALIDE 
+			e.printStackTrace();
+		}
+
+	}
+		
+	@Override
+	public void delete(int id) throws BusinessException {
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(DELETE);
+			stm.setInt(1, id);
+			stm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			BusinessException businessException = new BusinessException();
+			businessException.ajouterErreur(CodesResultatDAL.SUPPRESSION_UTILISATEUR);
+			throw businessException;
+		}
+
+	}
+	@Override
+	public List<Retrait> selectAll() throws BusinessException {
+		List<Retrait> retrait = new ArrayList<Retrait>();
+		try (Connection cnx = ConnectionProvider.getConnection()) {
+			PreparedStatement stm = cnx.prepareStatement(SELECT_ALL);
+			ResultSet rs = stm.executeQuery();
+			while (rs.next()) {
+				retrait.add(this.retraitsConstructeur(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return retrait;
+	}
+
 
 
 } 

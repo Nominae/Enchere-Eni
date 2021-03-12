@@ -19,32 +19,46 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 
 public class ArticleDAOJdbcImpl implements ArticleDAO {
 	private static final String DELETE = "delete from ARTICLES_VENDUS where no_article=?";
-	private static final String INSERT = "insert into ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateurs, no_categorie, no_retrait, etatVente) "
+	
+	private static final String INSERT = "insert into ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, no_retrait, etatVente) "
 			+ "values(?,?,?,?,?,?,?,?,?,?)";
-	private static final String INSERT_AVEC_CHEMIN_IMG = "insert into ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateurs, no_categorie, no_retrait, etatVente, cheminImg) "
+	
+	private static final String INSERT_AVEC_CHEMIN_IMG = "insert into ARTICLES_VENDUS (nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial, prix_vente, no_utilisateur, no_categorie, no_retrait, etatVente) "
 			+ "values(?,?,?,?,?,?,?,?,?,?,?)";
+	
 	private static final String SELECT_ID = "select * from ARTICLES_VENDUS where no_article=?";
+	
 	private static final String SELECT_ALL = "select * from ARTICLES_VENDUS";
+	
 	private static final String SELECT_NO_CATEGORIE = "select * from ARTICLES_VENDUS where no_categorie=? and etatVente=0";
+	
 	private static final String SELECT_RECHERCHER = "select * from ARTICLES_VENDUS where nom_article like '%' + ? + '%' and etatVente=0";
+	
 	private static final String SELECT_RECHERCHER_CATEGORIE = "select * from ARTICLES_VENDUS where nom_article like '%' + ? + '%' and no_categorie=? and etatVente=0";
-	private static final String SELECT_ACHAT_ALL = "select * from ARTICLES_VENDUS where no_utilisateurs not in (?) and etatVente=0";
-	private static final String SELECT_ACHAT_ENCHERE_EN_COURS = "select ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateurs,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente"
-			+ " from ARTICLES_VENDUS inner join ENCHERES  on ARTICLES_VENDUS.no_article=ENCHERES.no_article where ENCHERES.no_utilisateurs=? and etatVente=0 and ARTICLES_VENDUS.no_utilisateurs not in (?)"
-			+ " group by ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateurs,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente";
-	private static final String SELECT_ACHAT_ENCHERE_REMPORTE = "select ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateurs,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente"
-			+ " from ARTICLES_VENDUS inner join ENCHERES  on ARTICLES_VENDUS.no_article=ENCHERES.no_article where ENCHERES.no_utilisateurs=? and etatVente=1 and ARTICLES_VENDUS.no_utilisateurs not in (?)"
-			+ " group by ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateurs,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente";
-	private static final String SELECT_VENTE_ALL = "select * from ARTICLES_VENDUS where no_utilisateurs=?";
-	private static final String SELECT_VENTE_EN_COURS = "select * from ARTICLES_VENDUS where no_utilisateurs=? and etatVente=0";
-	private static final String SELECT_VENTE_TERMINE = "select * from ARTICLES_VENDUS where no_utilisateurs=? and etatVente=1";
-	private static final String UPDATE = "update ARTICLES_VENDUS Set nom_article= ?,description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?,prix_vente=?, no_utilisateurs=?,no_categorie=?, no_retrait=? where no_article=?";
+	
+	private static final String SELECT_ACHAT_ALL = "select * from ARTICLES_VENDUS where no_utilisateur not in (?) and etatVente=0";
+	
+	private static final String SELECT_ACHAT_ENCHERE_EN_COURS = "select ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateur,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente"
+			+ " from ARTICLES_VENDUS inner join ENCHERES  on ARTICLES_VENDUS.no_article=ENCHERES.no_article where ENCHERES.no_utilisateur=? and etatVente=0 and ARTICLES_VENDUS.no_utilisateur not in (?)"
+			+ " group by ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateur,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente";
+	
+	private static final String SELECT_ACHAT_ENCHERE_REMPORTE = "select ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateur,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente"
+			+ " from ARTICLES_VENDUS inner join ENCHERES  on ARTICLES_VENDUS.no_article=ENCHERES.no_article where ENCHERES.no_utilisateur=? and etatVente=1 and ARTICLES_VENDUS.no_utilisateur not in (?)"
+			+ " group by ARTICLES_VENDUS.no_article, nom_article, description, date_debut_encheres, date_fin_encheres, prix_initial,prix_vente, ARTICLES_VENDUS.no_utilisateur,ARTICLES_VENDUS.no_categorie,ARTICLES_VENDUS.no_retrait,etatVente";
+	
+	private static final String SELECT_VENTE_ALL = "select * from ARTICLES_VENDUS where no_utilisateur=?";
+	
+	private static final String SELECT_VENTE_EN_COURS = "select * from ARTICLES_VENDUS where no_utilisateur=? and etatVente=0";
+	
+	private static final String SELECT_VENTE_TERMINE = "select * from ARTICLES_VENDUS where no_utilisateur=? and etatVente=1";
+	
+	private static final String UPDATE = "update ARTICLES_VENDUS Set nom_article= ?,description=?, date_debut_encheres=?, date_fin_encheres=?, prix_initial=?,prix_vente=?, no_utilisateur=?,no_categorie=?, no_retrait=? where no_article=?";
+	
 	private static final String UPDATE_PRIX_DE_VENTE = "update ARTICLES_VENDUS Set  prix_vente=? where no_article=?";
+	
 	private static final String UPDATE_ETAT_VENTE = "update ARTICLES_VENDUS Set  etatVente=? where no_article=?";
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public void delete(int id) throws BusinessException {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -60,9 +74,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public void insert(Article article) throws BusinessException {
 		if (article == null) {
@@ -98,10 +110,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
+	
+	/**@Override
 	public void insertAvecCheminImg(Article article) throws BusinessException {
 		if (article == null) {
 			BusinessException businessException = new BusinessException();
@@ -136,11 +146,9 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 			businessException.ajouterErreur(CodesResultatDAL.INSERTION_ARTICLE);
 			throw businessException;
 		}
-	}
+	}**/
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public Article selectId(int id) throws BusinessException {
 		Article article = null;
@@ -165,9 +173,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return article;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public List<Article> selectCategorie(int noCategorie) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -188,9 +194,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public List<Article> selectRechercher(String rechercher) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -211,9 +215,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public List<Article> selectCategorieRechercher(String rechercher, int noCategorie) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -235,15 +237,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public List<Article> selectAchatAll(int noutilisateurs) throws BusinessException {
+	public List<Article> selectAchatAll(int noutilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ACHAT_ALL);
-			pstmt.setInt(1, noutilisateurs);
+			pstmt.setInt(1, noutilisateur);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
@@ -258,16 +257,14 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public List<Article> selectAchatEnchereEnCour(int noutilisateurs) throws BusinessException {
+	public List<Article> selectAchatEnchereEnCour(int noutilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ACHAT_ENCHERE_EN_COURS);
-			pstmt.setInt(1, noutilisateurs);
-			pstmt.setInt(2, noutilisateurs);
+			pstmt.setInt(1, noutilisateur);
+			pstmt.setInt(2, noutilisateur);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
@@ -282,11 +279,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public List<Article> selectAchatEnchereRemporte(int noutilisateurs) throws BusinessException {
+	public List<Article> selectAchatEnchereRemporte(int noutilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		EnchereManager EnchereManager = new EnchereManager();
 		Article article = null;
@@ -294,15 +288,15 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		Enchere enchere = null;
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_ACHAT_ENCHERE_REMPORTE);
-			pstmt.setInt(1, noutilisateurs);
-			pstmt.setInt(2, noutilisateurs);
+			pstmt.setInt(1, noutilisateur);
+			pstmt.setInt(2, noutilisateur);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				article = this.articleConstructeur(rs);
 				encheres = EnchereManager.selectHistoriqueArticle(article.getNo_article());
 				if (!encheres.isEmpty()) {
 					enchere = encheres.get(encheres.size() - 1);
-					if (enchere.getNo_utilisateur() == noutilisateurs) {
+					if (enchere.getNo_utilisateur() == noutilisateur) {
 						articles.add(article);
 					}
 				}
@@ -317,15 +311,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
-	public List<Article> selectVenteAll(int noutilisateurs) throws BusinessException {
+	public List<Article> selectVenteAll(int noutilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_ALL);
-			pstmt.setInt(1, noutilisateurs);
+			pstmt.setInt(1, noutilisateur);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
@@ -340,15 +332,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		return articles;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
-	public List<Article> selectVenteEnCour(int noutilisateurs) throws BusinessException {
+	public List<Article> selectVenteEnCour(int noutilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_EN_COURS);
-			pstmt.setInt(1, noutilisateurs);
+			pstmt.setInt(1, noutilisateur);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
@@ -364,7 +354,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * 
 	 
 	@Override
 	public List<Article> selectVenteNonDebute(int noutilisateurs) throws BusinessException {
@@ -394,11 +384,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 
 	
 	@Override
-	public List<Article> selectVenteTermine(int noutilisateurs) throws BusinessException {
+	public List<Article> selectVenteTermine(int noutilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
 		try (Connection cnx = ConnectionProvider.getConnection()) {
 			PreparedStatement pstmt = cnx.prepareStatement(SELECT_VENTE_TERMINE);
-			pstmt.setInt(1, noutilisateurs);
+			pstmt.setInt(1, noutilisateur);
 			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
 				articles.add(this.articleConstructeur(rs));
@@ -476,7 +466,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	}
 
 	/**
-	 * Méthode en charge d'update l'etat de vente de l'article en bd passant en
+	 * Méthode en charge d'update l'etat de vente de l'article en bdd, de
 	 * vente à vendu
 	 */
 
@@ -496,7 +486,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 	/**
 	 * Méthode en charge de constuire les articles après extraction de la bd. la
 	 * methode verifie aussi que la date de fin d'enchere a expiré, si c'est le cas
-	 * elle update en bd le statut de la vente et verifie si une enchere a été passée
+	 * elle update en bdd le statut de la vente et verifie si une enchere a été passée
 	 * sur l'article. Auquel cas elle credite le vendeur du montant de l'offre
 	 */
 	private Article articleConstructeur(ResultSet rs) throws SQLException, BusinessException {
@@ -508,11 +498,10 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
 		article.setDate_fin_encheres(rs.getDate("date_fin_encheres"));
 		article.setPrix_initial(rs.getInt("prix_initial"));
 		article.setPrix_vente(rs.getInt("prix_vente"));
-		article.setNo_utilisateur(rs.getInt("no_utilisateurs"));
+		article.setNo_utilisateur(rs.getInt("no_utilisateur"));
 		article.setNo_categorie(rs.getInt("no_categorie"));
 		article.setNo_retrait(rs.getInt("no_retrait"));
 		article.setEtatVente(rs.getBoolean("etatVente"));
-		article.setCheminImg(rs.getString("cheminImg"));
 		if (article.getDate_fin_encheres().toLocalDate().isBefore(LocalDate.now().plusDays(1))) {
 			this.updateEtatVente(article);
 			article.setEtatVente(true);

@@ -18,7 +18,7 @@ public class CategorieDAOJdbcImpl implements CategorieDAO {
 	private final static String UPDATE_CAT = "update from CATEGORIES where no_categorie = ? and libellé = ? ;";
 	private final static String INSERT_CAT = "insert into CATEGORIES(no_categorie, libelle (?;?);";
 	private final static String DELETE_CAT_BY_NUM = "delete from CATEGORIES where no_categorie = ?;";
-	private final static String DELETE_CAT_BY_LIBELLE = "delete from CATEGORIES where libellE = ?;";
+	private final static String DELETE_CAT_BY_LIBELLE = "delete from CATEGORIES where libelle = ?;";
 	private static final String SELECT_ALL = "select * from CATEGORIES";
 
 

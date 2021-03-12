@@ -44,3 +44,5 @@ public abstract class FileSave {
 
 } 
 }
+
+// CLASSE POUR AJOUT D'IMG, A RECHERCHER

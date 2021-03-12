@@ -13,3 +13,4 @@ public class TokenGenerator {
             return ( username + ":" + random );
     }
 }
+// CLASSE POUR AJOUT D'IMG, A RECHERCHER

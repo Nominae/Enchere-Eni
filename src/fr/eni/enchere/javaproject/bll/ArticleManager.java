@@ -13,8 +13,8 @@ import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.utils.BusinessException;
 
 /**
- * Classe en charge d'acceder au differente methode de la dal li� au article,
- * elle fait des verfications de conformit� des articles avant insertion et
+ * Classe en charge d'acceder aux differentes methode de la dal lié aux article,
+ * elle fait des verifications de conformité des articles avant insertion et
  * l'update
  */
 
@@ -31,7 +31,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de deleguer � la dal la suprresion de l'article
+	 * M�thode en charge de deleguer à la dal la suppresion de l'article
 	 */
 	public void delete(int id) throws BusinessException {
 		this.articleDao.delete(id);
@@ -39,44 +39,32 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de deleguer l'insertion d'un retrait, puis d'un article. La
-	 * methode qui est appel� pour l'insertion du retrait verifie si c'est un
-	 * nouveau retrait ou si il est deja en bd, dans tout les cas elle retourne un
+	 * Méthode en charge de deleguer l'insertion d'un retrait, puis d'un article. La
+	 * methode qui est appelée pour l'insertion du retrait, verifie si c'est un
+	 * nouveau retrait ou si il est deja en bdd, et retourne dans tout les cas un
 	 * retrait qui permet de recuperer le numero de retrait lié a l'article a mettre
 	 * en vente
 	 */
 	public void insert(Article article, Retrait retrait) throws BusinessException {
 		BusinessException businessException = new BusinessException();
-		RetraitManager retraitManager = new RetraitManager();
-		retrait = retraitManager.insert(retrait);
-		if (article.getCheminImg() == null) {
+		RetraitManager retraitManageur = new RetraitManager();
+		retrait = retraitManageur.insert(retrait);
 			this.validerArticle(article, businessException);
 			if (!businessException.hasErreurs()) {
 				article.setEtatVente(false);
-				article.setNo_retrait(retrait.getNoArticle());
+				article.setNo_retrait(retrait.getNoRetrait());
 				this.articleDao.insert(article);
 			} else {
 				this.validerArticle(article, businessException);
 				if (!businessException.hasErreurs()) {
 					article.setEtatVente(false);
-					article.setNo_retrait(retrait.getNoArticle());
-					this.articleDao.insertAvecCheminImg(article);
+					article.setNo_retrait(retrait.getNoRetrait());		
 				}
 			}
-		} else {
-			this.validerArticle(article, businessException);
-			if (!businessException.hasErreurs()) {
-				article.setEtatVente(false);
-				article.setNo_retrait(retrait.getNoArticle());
-				this.articleDao.insertAvecCheminImg(article);
-			} else {
-				throw businessException;
-			}
-		}
 	}
 
 	/**
-	 * M�thode en charge de selectionner un article par son id
+	 * Méthode en charge de selectionner un article par son id
 	 */
 	public Article selectId(int id) throws BusinessException {
 		Article article = new Article();
@@ -85,7 +73,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner les articles en fonction d'une categorie
+	 * Méthode en charge de selectionner les articles en fonction d'une categorie
 	 */
 	public List<Article> selectCategorie(int noCategorie) throws BusinessException {
 		List<Article> articles = new ArrayList<>();
@@ -94,7 +82,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner les articles en fonction d'une categorie
+	 * Méthode en charge de selectionner les articles en fonction d'une categorie
 	 */
 	public List<Article> selectRechercher(String rechercher) throws BusinessException {
 		List<Article> articles = new ArrayList<>();
@@ -103,7 +91,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner les articles par mot clef et no decategorie
+	 * Méthode en charge de selectionner les articles par mot clef et no de categorie
 	 */
 	public List<Article> selectCategorieRechercher(String rechercher, int noCategorie) throws BusinessException {
 		List<Article> article = new ArrayList<>();
@@ -112,7 +100,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner tout les articles en bd
+	 * Méthode en charge de selectionner tout les articles en bdd
 	 */
 	public List<Article> selectAll() throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -121,7 +109,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner les articles des autres utilisateurs
+	 * Méthode en charge de selectionner les articles des autres utilisateurs
 	 */
 	public List<Article> selectAchatAll(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -130,8 +118,8 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner les articles sur lequel l'utilisateur �
-	 * encherie
+	 * Méthode en charge de selectionner les articles sur lequel l'utilisateur a
+	 * encheri
 	 */
 	public List<Article> selectAchatEnchereEnCour(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -140,7 +128,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner les encheres remport� par l'utilisateur
+	 * Méthode en charge de selectionner les encheres remportés par l'utilisateur
 	 */
 	public List<Article> selectAchatEnchereRemporte(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -149,7 +137,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner tout les articles que l'utilisateur � mis
+	 * Méthode en charge de selectionner tout les articles que l'utilisateur � mis
 	 * en vente
 	 */
 	public List<Article> selectVenteAll(int noUtilisateur) throws BusinessException {
@@ -159,8 +147,8 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner tout les articles mise en vente par
-	 * l'utilisateur ou la date de fin d'enchere est pass�
+	 * Méthode en charge de selectionner tout les articles mise en vente par
+	 * l'utilisateur lorsque la date de fin d'enchere est passée
 	 */
 	public List<Article> selectVenteTermine(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -169,8 +157,8 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner tout les articles mise en vente
-	 * parl'utilisateur ou l'enchere est en cour
+	 * Méthode en charge de selectionner tout les articles mise en vente
+	 * par l'utilisateur lorsque l'enchere est en cours
 	 */
 	public List<Article> selectVenteEnCour(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -179,8 +167,9 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de selectionner tout les articles mise en vente par
-	 * l'utilisateur ou l'enchere n'a pas debut�e
+	 * Méthode en charge de selectionner tout les articles mise en vente par
+	 * l'utilisateur lorsque l'enchere n'a pas debutée
+NON IMPLEMENTEE, NE MARCHE PAS
 	 
 	public List<Article> selectVenteNonDebute(int noUtilisateur) throws BusinessException {
 		List<Article> articles = new ArrayList<Article>();
@@ -190,7 +179,7 @@ public class ArticleManager {
 	*/
 
 	/**
-	 * M�thode en charge d'update un article
+	 * Méthode en charge d'update un article
 	 */
 	public void update(Article article, int id) throws BusinessException, SQLException {
 
@@ -205,7 +194,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge d'update le prix de vente d'un article
+	 * Méthode en charge d'update le prix de vente d'un article
 	 */
 	public void updatePrixVente(int id, int prixDeVente) throws BusinessException, SQLException {
 
@@ -220,7 +209,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier que l'enchere propos� est plus elev� que le
+	 * Méthode en charge de verifier que l'enchere proposé est plus elevé que le
 	 * prix de vente
 	 */
 	private void validerArticleModifPrixDeVente(int id, int prixDeVente, BusinessException businessException)
@@ -233,7 +222,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier si l'article est conforme
+	 * Méthode en charge de verifier si l'article est conforme
 	 */
 	private void validerArticle(Article article, BusinessException businessException) {
 		this.validerNomArticle(article, businessException);
@@ -249,7 +238,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier le numero de retrait il doit etre supperieur �
+	 * Méthode en charge de verifier si le numero de retrait est supérieur à
 	 * 0
 	 */
 	private void validerNoRetrait(Article article, BusinessException businessException) {
@@ -259,8 +248,8 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier le numero de categorie il doit etre supperieur
-	 * � 0
+	 * Méthode en charge de verifier si le numero de categorie est supérieur
+	 *à 0
 	 */
 	private void validerNoCategorie(Article article, BusinessException businessException) {
 		if (article.getNo_categorie() < 0) {
@@ -269,7 +258,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de valider le numero d'utilisateur il doit etre superieur �
+	 * Méthode en charge de valider le numero d'utilisateur il doit etre superieur à
 	 * 0
 	 */
 	private void validerNoUtilisateur(Article article, BusinessException businessException) {
@@ -279,9 +268,8 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de valider le prix de vente, la methode verifie que le prix
-	 * de vente est superieur � 0 et que le prix de vente est superieur au prix
-	 * initial
+	 * Méthode en charge de valider le prix de vente, la methode verifie que le prix
+	 * de vente est superieur à 0 et est superieur au prix initial
 	 */
 	private void validerPrixVente(Article article, BusinessException businessException) {
 		if (article.getPrix_vente() < 0) {
@@ -294,7 +282,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier que le prix initial est superieur � 0
+	 * Méthode en charge de verifier que le prix initial est superieur à 0
 	 */
 	private void validerPrixInitial(Article article, BusinessException businessException) {
 		if (article.getPrix_initial() < 0) {
@@ -304,7 +292,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier que la date de fin d'enchere est superieur � la
+	 * Méthode en charge de verifier que la date de fin d'enchere est superieur à la
 	 * date de debut d'enchere
 	 */
 	private void validerFinEnchere(Article article, BusinessException businessException) {
@@ -315,7 +303,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier que la date de debut n'est pas avant la date du
+	 * Méthode en charge de verifier que la date de debut n'est pas avant la date du
 	 * jour
 	 */
 	private void validerDebutEnchere(Article article, BusinessException businessException) {
@@ -327,7 +315,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier que la description est ni null ni superieur �
+	 * Méthode en charge de verifier que la description est ni null ni superieur à
 	 * 300
 	 */
 	private void validerDescription(Article article, BusinessException businessException) {
@@ -338,7 +326,7 @@ public class ArticleManager {
 	}
 
 	/**
-	 * M�thode en charge de verifier que le nom de l'article n'est pas superieur �
+	 * Méthode en charge de verifier que le nom de l'article n'est pas superieur à
 	 * 30 lettres
 	 */
 	private void validerNomArticle(Article article, BusinessException businessException) {

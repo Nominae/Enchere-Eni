@@ -1,10 +1,13 @@
 package fr.eni.enchere.javaproject.bll;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.eni.enchere.javaproject.bo.Retrait;
 import fr.eni.enchere.javaproject.dal.DAOFactory;
 import fr.eni.enchere.javaproject.dal.RetraitDAO;
 import fr.eni.enchere.javaproject.utils.BusinessException;
-import fr.eni.enchere.javaproject.dal.DALException;
 
 
 public class RetraitManager {
@@ -16,22 +19,30 @@ public class RetraitManager {
 		this.RetraitDAO = DAOFactory.getRetraitDAO();
 	}
 	
-	public void InsertRetrait(int noArticle, String Rue, String CodePostal, String Ville ) throws DALException {
-		Retrait retrait = new Retrait();
-		retrait.setNoArticle(noArticle);
-		retrait.setRue(Rue);
-		retrait.setCodePostal(CodePostal);
-		retrait.setVille(Ville);
-		this.RetraitDAO.InsertRetrait(retrait);
-	}
-		
-	public void updateRetrait(Retrait MajRetrait)  throws DALException {
-		this.RetraitDAO.updateRetrait(MajRetrait);
+	public void delete(int id) throws BusinessException {
+
+		this.RetraitDAO.delete(id);
 	}
 	
-	public void deleteRetrait(int noArticle) {
-		this.RetraitDAO.deleteRetrait(noArticle);
+	public Retrait selectId(int id) throws BusinessException {
+		Retrait retrait = this.RetraitDAO.selectId(id);
+		return retrait;
 	}
+	
+	public void update(Retrait retrait, int id) throws BusinessException, SQLException {
+		BusinessException businessException = new BusinessException();
+		this.validerRetrait(retrait, businessException);
+		if (!businessException.hasErreurs()) {
+			this.RetraitDAO.update(retrait, id);
+		}
+	}
+	
+	public List<Retrait> selectAll() throws BusinessException {
+		List<Retrait> retraits = new ArrayList<Retrait>();
+		retraits = this.RetraitDAO.selectAll();
+		return retraits;
+	}
+
 	
 	public Retrait insert(Retrait retrait) throws BusinessException {
 		BusinessException businessException = new BusinessException();

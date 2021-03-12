@@ -1,15 +1,13 @@
 package fr.eni.enchere.javaproject.bo;
 
-import java.io.Serializable;
 
-public class Retrait implements Serializable{
+public class Retrait  {
 
 	
-	private static final long serialVersionUID = 1L;
-	private int noArticle;
-	private String rue;
-	private String codePostal;
-	private String ville;
+	 Integer noRetrait;
+	 String rue;
+	 String codePostal;
+	 String ville;
 	
 	
 // Constructeur par défaut
@@ -18,9 +16,9 @@ public class Retrait implements Serializable{
 	}
 
 // Constructeur prenant en compte tous les paramètres
-	public Retrait(int noArticle, String rue, String codePostal, String ville) {
+	public Retrait(int noRetrait, String rue, String codePostal, String ville) {
 		super();
-		this.noArticle = noArticle;
+		this.noRetrait = noRetrait;
 		this.rue = rue;
 		this.codePostal = codePostal;
 		this.ville = ville;
@@ -28,12 +26,12 @@ public class Retrait implements Serializable{
 
 	
 // Getters et Setters 
-	public int getNoArticle() {
-		return noArticle;
+	public Integer getNoRetrait() {
+		return noRetrait;
 	}
 
-	public void setNoArticle(int noArticle) {
-		this.noArticle = noArticle;
+	public void setNoRetrait(int noRetrait) {
+		this.noRetrait = noRetrait;
 	}
 
 	public String getRue() {
@@ -63,8 +61,9 @@ public class Retrait implements Serializable{
 // Méthode ToString
 	@Override
 	public String toString() {
-		return "Retrait ->\n Num Article :" + noArticle + "\n rue :" + rue + "\n Code Postal :" + codePostal + "\n Ville :" + ville;
+		return "Retrait ->\n Num Article :" + noRetrait + "\n rue :" + rue + "\n Code Postal :" + codePostal + "\n Ville :" + ville;
 	}
+
 	
 	
 	

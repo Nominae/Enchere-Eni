@@ -13,10 +13,6 @@ import fr.eni.enchere.javaproject.utils.BusinessException;
 
 /**
  * Classe en charge de faire les traitements sur la bd des encheres
- * 
- * @author aurel
- * @version TPENIEnchere - v1.0
- * @date 14 janv. 2021 - 16:48:40
  */
 public class EnchereDAOJdbcImpl implements EnchereDAO {
 	private static final String DELETE = "delete from ENCHERES where no_enchere=?";
@@ -28,9 +24,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 	private static final String SELECT_ALL = "select * from ENCHERES";
 	private static final String UPDATE = "update ENCHERES Set date_enchere= ?, montant_enchere=?, no_article=?, no_utilisateur=? where no_enchere=?";
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public void delete(int id) throws BusinessException {
 		try (Connection cnx = ConnectionProvider.getConnection()) {
@@ -46,9 +40,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public void insert(Enchere enchere) throws BusinessException {
 		if (enchere == null) {
@@ -78,9 +70,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public Enchere selectId(int id) throws BusinessException {
 		Enchere enchere = null;
@@ -105,9 +95,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return enchere;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public List<Enchere> selectHistoriqueArticle(int noArticle) throws BusinessException {
 		List<Enchere> encheres = new ArrayList<>();
@@ -128,9 +116,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return encheres;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public List<Enchere> selectAll() throws BusinessException {
 		List<Enchere> encheres = new ArrayList<Enchere>();
@@ -146,9 +132,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return encheres;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public void update(Enchere enchere, int id) throws BusinessException, SQLException {
 		if (enchere == null) {
@@ -172,11 +156,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 	}
 
 	/**
-	 * Méthode en charge de construire des encheres après extraction en bd
-	 * 
-	 * @param rs resultset d'extraction de bd
-	 * @return un objet de type enchere
-	 * @throws SQLException
+	 * Méthode en charge de construire des encheres après extraction en bdd
 	 */
 	private Enchere encheresConstructeur(ResultSet rs) throws SQLException {
 		Enchere enchere = new Enchere();
@@ -188,9 +168,7 @@ public class EnchereDAOJdbcImpl implements EnchereDAO {
 		return enchere;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	
 	@Override
 	public List<Enchere> selectHistoriqueArticleDecroissant(int noArticle) throws BusinessException {
 		List<Enchere> encheres = new ArrayList<>();

@@ -72,7 +72,7 @@ public class ServletModificationArticle extends HttpServlet {
 				 
 				try {
 					unRetrait = retraitManageur.insert(unRetrait);
-					unArticle.setNo_retrait(unRetrait.getNoArticle());
+					unArticle.setNo_retrait(unRetrait.getNoRetrait());
 					articleManager.update(unArticle, idArticle);
 				} catch (BusinessException | SQLException e) {
 					// TODO Auto-generated catch block

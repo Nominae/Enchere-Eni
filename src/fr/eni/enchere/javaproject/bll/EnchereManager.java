@@ -14,36 +14,27 @@ import fr.eni.enchere.javaproject.dal.GeneriqueDAO;
 import fr.eni.enchere.javaproject.utils.BusinessException;
 
 /**
- * Classe en charge d'acceder au methode de la dal li� au enchere, elle verifie
- * aussi que les encheres sont conforme au exigence du projet avant insertion ou
+ * Classe en charge d'acceder au methode de la dal liée aux encheres, elle verifie
+ *  que les encheres sont conformes aux exigence du projet avant insertion ou
  * modification
- * 
- * @author aurel
- * @version TPENIEnchere - v1.0
- * @date 15 janv. 2021 - 12:31:30
  */
 public class EnchereManager implements GeneriqueDAO<Enchere> {
 	EnchereDAO enchereDao;
 
 	/**
 	 * Constructeur permetant d'obtenir une instance de EnchereDaoImpl en passant
-	 * pas le Dao factory
+	 * par le DAOFACTORY
 	 */
 	public EnchereManager() {
 		this.enchereDao = DAOFactory.getEnchere();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public void delete(int id) throws BusinessException {
 		this.enchereDao.delete(id);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void insert(Enchere enchere) throws BusinessException {
 		BusinessException businessException = new BusinessException();
@@ -54,18 +45,14 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public Enchere selectId(int id) throws BusinessException {
 		Enchere enchere = this.enchereDao.selectId(id);
 		return enchere;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
 	public List<Enchere> selectAll() throws BusinessException {
 		List<Enchere> encheres = new ArrayList<Enchere>();
@@ -74,11 +61,7 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de retourner une liste d'enchere li� � un article
-	 * 
-	 * @param noArticle numero de l'article
-	 * @return liste d'enchere filtr�
-	 * @throws BusinessException
+	 * Méthode en charge de retourner une liste d'enchere liée à un article
 	 */
 	public List<Enchere> selectHistoriqueArticle(int noArticle) throws BusinessException {
 		List<Enchere> encheres = new ArrayList<Enchere>();
@@ -87,12 +70,8 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de retourner une liste d'enchere de maniere decroissante
-	 * li� � un article
-	 * 
-	 * @param noArticle numero de l'article
-	 * @return liste d'enchere filtr�
-	 * @throws BusinessException
+	 * Méthode en charge de retourner une liste d'enchere de manière décroissante
+	 * liée à un article
 	 */
 	public List<Enchere> selectHistoriqueArticleDecroissant(int noArticle) throws BusinessException {
 		List<Enchere> encheres = new ArrayList<Enchere>();
@@ -100,9 +79,6 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 		return encheres;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void update(Enchere enchere, int id) throws BusinessException, SQLException {
 		BusinessException businessException = new BusinessException();
@@ -114,11 +90,9 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de verifier si l'enchere propos� respecte les condition �
+	 * Méthode en charge de verifier si l'enchere proposée respecte les condition de
 	 * son insertion ou modification
-	 * 
-	 * @param enchere           enchere a verifier
-	 * @param businessException
+	 
 	 */
 	private void validerEncheres(Enchere enchere, BusinessException businessException) {
 		this.validerDateEnchere(enchere, businessException);
@@ -129,10 +103,7 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de verifier si le numero d'utilisateur est superieur � 0
-	 * 
-	 * @param enchere           enchere � verifier
-	 * @param businessException
+	 * Méthode en charge de verifier si le numero d'utilisateur est superieur à 0
 	 */
 	private void validerNoUtilisateur(Enchere enchere, BusinessException businessException) {
 		if (enchere.getNo_utilisateur() < 0) {
@@ -141,10 +112,7 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de verifier si le numero d'article est superieur � 0
-	 * 
-	 * @param enchere           enchere � verifier
-	 * @param businessException
+	 * Méthode en charge de verifier si le numero d'article est superieur à 0
 	 */
 	private void validerNoArticle(Enchere enchere, BusinessException businessException) {
 		if (enchere.getNo_article() < 0) {
@@ -154,10 +122,7 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de verifier si le montant de l'enchere est superieur � 0
-	 * 
-	 * @param enchere           enchere � verifier
-	 * @param businessException
+	 * Méthode en charge de verifier si le montant de l'enchere est superieur à 0
 	 */
 	private void validerMontantEnchere(Enchere enchere, BusinessException businessException) {
 		if (enchere.getMontant_enchere() < 0) {
@@ -167,11 +132,8 @@ public class EnchereManager implements GeneriqueDAO<Enchere> {
 	}
 
 	/**
-	 * M�thode en charge de verifier si la date de l'enchere est egal ou superieur �
+	 * Méthode en charge de verifier si la date de l'enchere est egale ou superieure à
 	 * la date du jour
-	 * 
-	 * @param enchere           enchere � verifier
-	 * @param businessException
 	 */
 	private void validerDateEnchere(Enchere enchere, BusinessException businessException) {
 		LocalDate localDate = LocalDate.now().minusDays(1);
