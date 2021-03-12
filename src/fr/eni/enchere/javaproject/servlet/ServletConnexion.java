@@ -41,6 +41,8 @@ public class ServletConnexion extends HttpServlet {
 			}
 		}
 		
+
+		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/Connexion.jsp");
 		
 		rd.forward(request, response);
@@ -72,7 +74,11 @@ public class ServletConnexion extends HttpServlet {
 			Cookie cookie2 = new Cookie("motDePasse", motDePasse);
 			cookie2.setMaxAge(60 * 60 * 24 * 30);
 			response.addCookie(cookie2);
+			
 		}
+		
+		
+		
 		
 		try {
 	           utilisateur = newUser.getUtilisateursLogin(EmailouPseudo, motDePasse);
@@ -85,6 +91,7 @@ public class ServletConnexion extends HttpServlet {
 	                
 	            } else {
 	                HttpSession session = request.getSession();
+	                session.setMaxInactiveInterval(5*60);
 	                session.setAttribute("utilisateur", utilisateur);
 	                //response.sendRedirect("/WEB-INF/connexion/AcceuilConnecte.jsp");
 	                request.getRequestDispatcher("/WEB-INF/connexion/AcceuilConnecte.jsp").forward(request, response);

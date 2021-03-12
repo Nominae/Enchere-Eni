@@ -69,6 +69,7 @@ public class ServletCreationCompte extends HttpServlet {
 			
 			HttpSession session = request.getSession();
             session.setAttribute("utilisateur", user);
+            session.setMaxInactiveInterval(5*60);
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/connexion/AcceuilConnecte.jsp");
 			rd.forward(request, response);
